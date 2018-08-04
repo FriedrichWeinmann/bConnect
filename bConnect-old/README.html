@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.css" integrity="sha384-BTL0nVi8DnMrNdMQZG1Ww6yasK9ZGnUxL1ZWukXQ7fygA1py52yPp9W4wrR00VML" crossorigin="anonymous">
+        <style>
+/*--------------------------------------------------------------------------------------------- * Copyright (c) Microsoft Corporation. All rights reserved. * Licensed under the MIT License. See License.txt in the project root for license information. *--------------------------------------------------------------------------------------------*/ body { font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback"; font-size: 14px; padding: 0 26px; line-height: 22px; word-wrap: break-word; } #code-csp-warning { position: fixed; top: 0; right: 0; color: white; margin: 16px; text-align: center; font-size: 12px; font-family: sans-serif; background-color:#444444; cursor: pointer; padding: 6px; box-shadow: 1px 1px 1px rgba(0,0,0,.25); } #code-csp-warning:hover { text-decoration: none; background-color:#007acc; box-shadow: 2px 2px 2px rgba(0,0,0,.25); } body.scrollBeyondLastLine { margin-bottom: calc(100vh - 22px); } body.showEditorSelection .code-line { position: relative; } body.showEditorSelection .code-active-line:before, body.showEditorSelection .code-line:hover:before { content: ""; display: block; position: absolute; top: 0; left: -12px; height: 100%; } body.showEditorSelection li.code-active-line:before, body.showEditorSelection li.code-line:hover:before { left: -30px; } .vscode-light.showEditorSelection .code-active-line:before { border-left: 3px solid rgba(0, 0, 0, 0.15); } .vscode-light.showEditorSelection .code-line:hover:before { border-left: 3px solid rgba(0, 0, 0, 0.40); } .vscode-light.showEditorSelection .code-line .code-line:hover:before { border-left: none; } .vscode-dark.showEditorSelection .code-active-line:before { border-left: 3px solid rgba(255, 255, 255, 0.4); } .vscode-dark.showEditorSelection .code-line:hover:before { border-left: 3px solid rgba(255, 255, 255, 0.60); } .vscode-dark.showEditorSelection .code-line .code-line:hover:before { border-left: none; } .vscode-high-contrast.showEditorSelection .code-active-line:before { border-left: 3px solid rgba(255, 160, 0, 0.7); } .vscode-high-contrast.showEditorSelection .code-line:hover:before { border-left: 3px solid rgba(255, 160, 0, 1); } .vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before { border-left: none; } img { max-width: 100%; max-height: 100%; } a { text-decoration: none; } a:hover { text-decoration: underline; } a:focus, input:focus, select:focus, textarea:focus { outline: 1px solid -webkit-focus-ring-color; outline-offset: -1px; } hr { border: 0; height: 2px; border-bottom: 2px solid; } h1 { padding-bottom: 0.3em; line-height: 1.2; border-bottom-width: 1px; border-bottom-style: solid; } h1, h2, h3 { font-weight: normal; } h1 code, h2 code, h3 code, h4 code, h5 code, h6 code { font-size: inherit; line-height: auto; } table { border-collapse: collapse; } table > thead > tr > th { text-align: left; border-bottom: 1px solid; } table > thead > tr > th, table > thead > tr > td, table > tbody > tr > th, table > tbody > tr > td { padding: 5px 10px; } table > tbody > tr + tr > td { border-top: 1px solid; } blockquote { margin: 0 7px 0 5px; padding: 0 16px 0 10px; border-left-width: 5px; border-left-style: solid; } code { font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback"; font-size: 14px; line-height: 19px; } body.wordWrap pre { white-space: pre-wrap; } .mac code { font-size: 12px; line-height: 18px; } pre:not(.hljs), pre.hljs code > div { padding: 16px; border-radius: 3px; overflow: auto; } /** Theming */ pre code { color: var(--vscode-editor-foreground); } .vscode-light pre:not(.hljs), .vscode-light code > div { background-color: rgba(220, 220, 220, 0.4); } .vscode-dark pre:not(.hljs), .vscode-dark code > div { background-color: rgba(10, 10, 10, 0.4); } .vscode-high-contrast pre:not(.hljs), .vscode-high-contrast code > div { background-color: rgb(0, 0, 0); } .vscode-high-contrast h1 { border-color: rgb(0, 0, 0); } .vscode-light table > thead > tr > th { border-color: rgba(0, 0, 0, 0.69); } .vscode-dark table > thead > tr > th { border-color: rgba(255, 255, 255, 0.69); } .vscode-light h1, .vscode-light hr, .vscode-light table > tbody > tr + tr > td { border-color: rgba(0, 0, 0, 0.18); } .vscode-dark h1, .vscode-dark hr, .vscode-dark table > tbody > tr + tr > td { border-color: rgba(255, 255, 255, 0.18); } 
+</style>
+<style>
+/* Tomorrow Theme */ /* http://jmblog.github.com/color-themes-for-google-code-highlightjs */ /* Original theme - https://github.com/chriskempson/tomorrow-theme */ /* Tomorrow Comment */ .hljs-comment, .hljs-quote { color: #8e908c; } /* Tomorrow Red */ .hljs-variable, .hljs-template-variable, .hljs-tag, .hljs-name, .hljs-selector-id, .hljs-selector-class, .hljs-regexp, .hljs-deletion { color: #c82829; } /* Tomorrow Orange */ .hljs-number, .hljs-built_in, .hljs-builtin-name, .hljs-literal, .hljs-type, .hljs-params, .hljs-meta, .hljs-link { color: #f5871f; } /* Tomorrow Yellow */ .hljs-attribute { color: #eab700; } /* Tomorrow Green */ .hljs-string, .hljs-symbol, .hljs-bullet, .hljs-addition { color: #718c00; } /* Tomorrow Blue */ .hljs-title, .hljs-section { color: #4271ae; } /* Tomorrow Purple */ .hljs-keyword, .hljs-selector-tag { color: #8959a8; } .hljs { display: block; overflow-x: auto; color: #4d4d4c; padding: 0.5em; } .hljs-emphasis { font-style: italic; } .hljs-strong { font-weight: bold; }
+</style>
+<style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'HelveticaNeue-Light', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id="bconnect">bConnect</h1>
+<h2 id="version-021">Version 0.2.1</h2>
+<p>Authored by Tobias Mueller</p>
+<p>Das Modul basiert auf der bConnect Version von Alexander Haugk vom 08.09.2017.</p>
+<p>Folgende Befehle stehen zur Zeit zur Verfügung:</p>
+<h3 id="installation">Installation</h3>
+<p>Zur Installation kann man eine Powershell Console mit Administrator Rechten starten und anschließend das Script &quot;inst_bconnect-module.ps1&quot; ausführen.</p>
+<p>Alternativ kann man das ganze auch manuell in folgende Pfade installieren:
+Powershell x86: %Systemroot%\system32\WindowsPowerShell\v1.0\Modules\bConnect
+Powershell x64: %Systemroot%\syswow64\WindowsPowerShell\v1.0\Modules\bConnect
+Powershell User Modules: %Userprofile%\Documents\WindowsPowerShell\Modules</p>
+<p>Wenn bConnect im User Module Ordner liegt ist es natürlich nur für den entsprechenden Benutzer verfügbar.</p>
+<h3 id="nutzung">Nutzung</h3>
+<p>Um das Modul zu nutzen kann man folgendes Snippet nutzen:</p>
+<pre><code>Import-Module -Name bConnect
+</code></pre>
+<p>Mit gültigem Zertifikat:</p>
+<pre><code>Initialize-bconnect -Server "<ServerName>" -Credentials "<Username>"
+</code></pre>
+<p>Mit selbstsigniertem Zertifikat:</p>
+<pre><code>Initialize-bconnect -Server "<ServerName>" -Credentials "<Username>" -AcceptSelfSignedCertifcate
+</code></pre>
+<p>Für ein Script ohne Benutzereingriff muss vorher ein Credentials Object erzeugt werden und als -Credential Parameter übergeben werden. Dann klappt es auch unattended.</p>
+<h2 id="verf%C3%BCgbare-cmdlets">Verfügbare Cmdlets</h2>
+<h3 id="core">Core</h3>
+<ul>
+<li>Initialize-bConnect</li>
+<li>Reset-bConnect</li>
+<li>Get-bConnectInfo</li>
+</ul>
+<h3 id="search">Search</h3>
+<ul>
+<li>Search-bConnectEndpoint</li>
+<li>Search-bConnectOrgUnit</li>
+<li>Search-bConnectGroup</li>
+<li>Search-bConnectStaticGroup</li>
+<li>Search-bConnectDynamicGroup</li>
+<li>Search-bConnectJob</li>
+<li>Search-bConnectApplication</li>
+</ul>
+<h3 id="org-unit">Org Unit</h3>
+<ul>
+<li>New-bConnectOrgUnitExtension</li>
+<li>Get-bConnectOrgUnit</li>
+<li>New-bConnectOrgUnit</li>
+<li>Remove-bConnectOrgUnit</li>
+<li>Edit-bConnectOrgUnit</li>
+</ul>
+<h3 id="dynamic-group">Dynamic Group</h3>
+<ul>
+<li>Get-bConnectDynamicGroup</li>
+<li>New-bConnectDynamicGroup</li>
+<li>Remove-bConnectDynamicGroup</li>
+<li>Edit-bConnectDynamicGroup</li>
+</ul>
+<h3 id="static-group">Static Group</h3>
+<ul>
+<li>Get-bConnectStaticGroup</li>
+<li>New-bConnectStaticGroup</li>
+<li>Remove-bConnectStaticGroup</li>
+<li>Edit-bConnectStaticGroup</li>
+</ul>
+<h3 id="endpoint">Endpoint</h3>
+<ul>
+<li>Get-bConnectEndpoint</li>
+<li>New-bConnectEndpoint</li>
+<li>Remove-bConnectEndpoint</li>
+<li>Edit-bConnectEndpoint</li>
+<li>Get-bConnectEndpointOption</li>
+<li>Set-bConnectEndpointOption</li>
+</ul>
+<h3 id="hardware-profile">Hardware Profile</h3>
+<ul>
+<li>Get-bConnectHardwareProfile</li>
+</ul>
+<h3 id="boot-environments">Boot Environments</h3>
+<ul>
+<li>Get-bConnectBootEnv</li>
+</ul>
+<h3 id="application">Application</h3>
+<ul>
+<li>Get-bConnectApplication</li>
+<li>New-bConnectApplication</li>
+<li>New-bConnectApplicationInstallOptions</li>
+<li>New-bConnectApplicationInstallUserSettings</li>
+<li>New-bConnectApplicationInstallationData</li>
+<li>New-bConnectApplicationUninstallOptions</li>
+<li>New-bConnectApplicationUninstallUserSettings</li>
+<li>New-bConnectApplicationUninstallationData</li>
+<li>New-bConnectApplicationAUTFileRule</li>
+<li>New-bConnectApplicationLicense</li>
+<li>Remove-bConnectApplication</li>
+<li>Edit-bConnectApplication</li>
+</ul>
+<h3 id="app">App</h3>
+<ul>
+<li>Get-bConnectApp</li>
+<li>Get-bConnectAppIcon</li>
+</ul>
+<h3 id="job">Job</h3>
+<ul>
+<li>Get-bConnectJob</li>
+</ul>
+<h3 id="job-instance">Job Instance</h3>
+<ul>
+<li>Get-bConnectJobInstance</li>
+<li>New-bConnectJobInstance</li>
+<li>Start-bConnectJobInstance</li>
+<li>Stop-bConnectJobInstance</li>
+<li>Resume-bConnectJobInstance</li>
+<li>Remove-bConnectJobInstance</li>
+</ul>
+<h3 id="variables">Variables</h3>
+<ul>
+<li>Get-bConnectVariable</li>
+<li>Set-bConnectVariable</li>
+</ul>
+<h3 id="inventory">Inventory</h3>
+<ul>
+<li>Get-bConnectInventoryDataRegistryScan</li>
+<li>Remove-bConnectInventoryDataRegistryScan</li>
+<li>Get-bConnectInventoryDataFileScan</li>
+<li>Remove-bConnectInventoryDataFileScan</li>
+<li>Get-bConnectInventoryDataWmiScan</li>
+<li>Get-bConnectInventoryDataCustomScan</li>
+<li>Get-bConnectInventoryDataHardwareScan</li>
+<li>Get-bConnectInventoryDataSnmpScan</li>
+<li>Get-bConnectInventoryOverview</li>
+<li>Get-bConnectSoftwareScanRule</li>
+<li>Get-bConnectEndpointInvSoftware</li>
+<li>Get-bConnectInventoryAppScan</li>
+</ul>
+
+    </body>
+    </html>

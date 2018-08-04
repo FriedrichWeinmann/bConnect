@@ -1,0 +1,25 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{43A596BE-FA3B-4ACD-A51B-A68160AD7689}") = "bConnect", "bConnect\bConnect.csproj", "{7554AB7B-FCC5-4C3B-9C5F-0C7D2CC72CC6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7554AB7B-FCC5-4C3B-9C5F-0C7D2CC72CC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7554AB7B-FCC5-4C3B-9C5F-0C7D2CC72CC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7554AB7B-FCC5-4C3B-9C5F-0C7D2CC72CC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7554AB7B-FCC5-4C3B-9C5F-0C7D2CC72CC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {423A5B51-EA5F-4BB4-9D6F-BB687CD91F83}
+	EndGlobalSection
+EndGlobal

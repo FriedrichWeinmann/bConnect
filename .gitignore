@@ -1,0 +1,16 @@
+
+# ignore the settings folder and files for VSCode and PSS
+.vscode/*
+*.psproj
+*TempPoint*
+
+# Ignore staging info from Visual Studio
+library/bConnect/.vs/*
+library/bConnect/bConnect/bin/*
+library/bConnect/bConnect/obj/*
+
+# ignore PowerShell Studio MetaData
+bConnect/bConnect.psproj
+bConnect/bConnect.psproj.bak
+bConnect/bConnect.psprojs
+bConnect/bConnect.psproj
