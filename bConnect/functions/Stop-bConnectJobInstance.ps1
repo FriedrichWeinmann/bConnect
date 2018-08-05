@@ -1,27 +1,33 @@
-Function Stop-bConnectJobInstance() {
-    <#
-        .Synopsis
-            Stop the specified jobinstance.
-        .Parameter JobInstanceGuid
-            Valid GUID of a jobinstance.
-        .Outputs
-            Bool
-    #>
+﻿function Stop-bConnectJobInstance
+{
+<#
+	.SYNOPSIS
+		Stop the specified jobinstance.
 	
-	Param (
-		[string]$JobInstanceGuid
+	.DESCRIPTION
+		Stop the specified jobinstance.
+	
+	.PARAMETER JobInstanceGuid
+		Valid GUID of a jobinstance.
+#>
+	[CmdletBinding()]
+	param (
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		[string]
+		$JobInstanceGuid
 	)
 	
-	$_connectVersion = Get-bConnectVersion
-	If ($_connectVersion -ge "1.0") {
-		$_body = @{
-			Id	   = $JobInstanceGuid;
-			Cmd    = "stop"
+	begin
+	{
+		Assert-bConnectConnection
+	}
+	process
+	{
+		$body = @{
+			Id  = $JobInstanceGuid
+			Cmd = 'stop'
 		}
 		
-		return Invoke-bConnectGet -Controller "JobInstances" -Data $_body
-	}
-	else {
-		return $false
+		Invoke-bConnectGet -Controller "JobInstances" -Data $body
 	}
 }

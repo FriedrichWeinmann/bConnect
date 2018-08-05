@@ -1,4 +1,4 @@
-function Get-bConnectJobInstance
+﻿function Get-bConnectJobInstance
 {
 <#
 	.SYNOPSIS

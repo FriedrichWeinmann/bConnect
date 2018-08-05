@@ -1,30 +1,36 @@
-Function Remove-bConnectOrgUnit() {
-    <#
-        .Synopsis
-            Remove specified OrgUnit.
-        .Parameter OrgUnitGuid
-            Valid GUID of a OrgUnit.
-        .Outputs
-            Bool
-    #>
+﻿function Remove-bConnectOrgUnit
+{
+<#
+	.SYNOPSIS
+		Remove specified OrgUnit.
+	
+	.DESCRIPTION
+		Remove specified OrgUnit.
+	
+	.PARAMETER OrgUnitGuid
+		Valid GUID of a OrgUnit.
+#>
 	[CmdletBinding(SupportsShouldProcess = $true)]
-	Param (
-		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]	
-		[ValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b')]
-		[string]$OrgUnitGuid
+	param (
+		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		[string]
+		$OrgUnitGuid
 	)
 	
-	$_connectVersion = Get-bConnectVersion
-	If ($_connectVersion -ge "1.0") {
-		$_body = @{
-			Id    = $OrgUnitGuid
+	begin
+	{
+		Assert-bConnectConnection
+	}
+	process
+	{
+		$body = @{
+			Id = $OrgUnitGuid;
 		}
 		
-		if ($pscmdlet.ShouldProcess($OrgUnitGuid, "Remove OrgUnit")) {
-			return Invoke-bConnectDelete -Controller "OrgUnits" -Data $_body
+		if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $OrgUnitGuid -Action 'Remove OrgUnit')
+		{
+			Invoke-bConnectDelete -Controller "OrgUnits" -Data $body
 		}
-	}
-	else {
-		return $false
 	}
 }

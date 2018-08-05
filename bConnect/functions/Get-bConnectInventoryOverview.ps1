@@ -1,4 +1,4 @@
-Function Get-bConnectInventoryOverview
+﻿Function Get-bConnectInventoryOverview
 {
 <#
 	.SYNOPSIS

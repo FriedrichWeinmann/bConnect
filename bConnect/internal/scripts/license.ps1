@@ -1,4 +1,4 @@
-New-PSFLicense -Product 'bConnect' -Manufacturer 'Baramundi AG' -ProductVersion $PSModuleVersion -ProductType Module -Name MIT -Version "1.0.0.0" -Date (Get-Date "2018-08-04") -Text @"
+﻿New-PSFLicense -Product 'bConnect' -Manufacturer 'Baramundi AG' -ProductVersion $ModuleVersion -ProductType Module -Name MIT -Version "1.0.0.0" -Date (Get-Date "2018-08-04") -Text @"
 Copyright (c) 2018 Baramundi AG
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

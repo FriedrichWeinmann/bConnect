@@ -1,4 +1,4 @@
-Function Get-bConnectVersion
+﻿Function Get-bConnectVersion
 {
 <#
 	.SYNOPSIS

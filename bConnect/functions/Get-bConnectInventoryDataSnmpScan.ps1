@@ -1,4 +1,4 @@
-function Get-bConnectInventoryDataSnmpScan
+﻿function Get-bConnectInventoryDataSnmpScan
 {
 <#
 	.SYNOPSIS

@@ -1,4 +1,4 @@
-Function Test-bConnect
+﻿Function Test-bConnect
 {
 <#
 	.SYNOPSIS

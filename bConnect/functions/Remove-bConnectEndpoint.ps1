@@ -1,60 +1,54 @@
+﻿function Remove-bConnectEndpoint
+{
 <#
-	.Synopsis
+	.SYNOPSIS
 		Remove specified endpoint.
 	
 	.DESCRIPTION
-		A detailed description of the Remove-bConnectEndpoint function.
+		Remove specified endpoint.
 	
-	.Parameter EndpointGuid
+	.PARAMETER EndpointGuid
 		Valid GUID of a endpoint.
 	
-	.Parameter Endpoint
+	.PARAMETER Endpoint
 		Valid Endpoint object
-	
-	.Outputs
-		Bool
-	
-	.NOTES
-		Additional information about the function.
 #>
-function Remove-bConnectEndpoint {
-	[CmdletBinding(ConfirmImpact = 'High',
-				   SupportsShouldProcess = $true)]
+	[CmdletBinding(ConfirmImpact = 'High', SupportsShouldProcess = $true, DefaultParameterSetName = 'Guid')]
 	param
 	(
-		[Parameter(ValueFromPipelineByPropertyName = $true)]
-		[ValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b')]
-		[string]$EndpointGuid,
-		[PSCustomObject]$Endpoint
+		[Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'Guid')]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		[string]
+		$EndpointGuid,
+		
+		[Parameter(Mandatory = $true, ParameterSetName = 'Object')]
+		[PsfValidateScript({ $null -ne $args[0].Id}, ErrorMessage = 'Input must have an ID property: {0}')]
+		[PSCustomObject]
+		$Endpoint
 	)
 	
-	BEGIN {
-		$Test = Test-bConnect
+	begin
+	{
+		Assert-bConnectConnection
+	}
+	process
+	{
+		if ($EndpointGuid)
+		{
+			$body = @{
+				Id = $EndpointGuid
+			}
+		}
+		else
+		{
+			$body = @{
+				Id = $Endpoint.Id
+			}
+		}
 		
-		If ($Test -ne $true) {
-			$ErrorObject = New-Object System.Net.WebSockets.WebSocketException "$Test"
-			Throw $ErrorObject
+		if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $EndpointGuid -Action 'Remove endpoint')
+		{
+			Invoke-bConnectDelete -Controller "Endpoints" -Data $body
 		}
-	}
-	PROCESS {
-		If (![string]::IsNullOrEmpty($EndpointGuid)) {
-			$_body = @{
-				Id	   = $EndpointGuid
-			}
-		}
-		elseif (![string]::IsNullOrEmpty($Endpoint.Id)) {
-			$_body = @{
-				Id	   = $Endpoint.Id
-			}
-		}
-		else {
-			return $false
-		}
-		if ($pscmdlet.ShouldProcess($EndpointGuid, "Remove Endpoints")) {
-			$Result = Invoke-bConnectDelete -Controller "Endpoints" -Data $_body
-		}
-	}
-	END {
-		$Result
 	}
 }

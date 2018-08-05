@@ -1,4 +1,4 @@
-Function New-bConnectApplicationUninstallUserSettings
+﻿Function New-bConnectApplicationUninstallUserSettings
 {
 <#
 	.SYNOPSIS
@@ -19,7 +19,7 @@ Function New-bConnectApplicationUninstallUserSettings
 	.PARAMETER CopyScriptToClient
 		If set, script will be copied to client
 #>
-	
+	[CmdletBinding()]
 	Param (
 		[string]
 		$baramundiDeployScript,

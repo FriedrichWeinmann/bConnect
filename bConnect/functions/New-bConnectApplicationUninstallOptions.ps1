@@ -1,4 +1,4 @@
-Function New-bConnectApplicationUninstallOptions
+﻿Function New-bConnectApplicationUninstallOptions
 {
 <#
 	.SYNOPSIS
@@ -27,7 +27,7 @@ Function New-bConnectApplicationUninstallOptions
 	.PARAMETER DisableInputDevices
 		If set, no input devices will be available during installation
 #>
-	
+	[CmdletBinding()]
 	Param (
 		[ValidateSet("NoReboot", "Reboot", "AppReboot", "DeferrableReboot")]
 		[string]

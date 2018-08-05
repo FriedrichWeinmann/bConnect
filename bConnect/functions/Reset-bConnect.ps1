@@ -1,16 +1,27 @@
-Function Reset-bConnect() {
-    <#
-        .Synopsis
-            Resets bConnect to uninitialized.   
-    #>
+﻿function Reset-bConnect
+{
+<#
+	.SYNOPSIS
+		Resets bConnect to uninitialized.
 	
+	.DESCRIPTION
+		Disconnects from the existing server, restoring the uninitialized state.
+		Generally not needed, except for debugging purposes.
 	
-	If ($script:_defaultCertPolicy) {
+	.EXAMPLE
+		PS C:\> Reset-bConnect
+	
+		Disconnects from the existing server, restoring the uninitialized state.
+#>
+	
+	[CmdletBinding()]
+	param ()
+	
+	if ($script:_defaultCertPolicy)
+	{
 		# Reset certicate validation
 		[System.Net.ServicePointManager]::CertificatePolicy = $script:_defaultCertPolicy
 	}
-	
-	$_uri = $null
 	
 	$script:_bConnectInfo = $null
 	$script:_connectUri = $null

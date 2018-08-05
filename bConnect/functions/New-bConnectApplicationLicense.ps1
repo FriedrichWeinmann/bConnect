@@ -1,4 +1,4 @@
-Function New-bConnectApplicationLicense
+﻿Function New-bConnectApplicationLicense
 {
 <#
 	.SYNOPSIS
@@ -16,7 +16,7 @@ Function New-bConnectApplicationLicense
 	.PARAMETER Offline
 		Amount of offline licenses
 #>
-	
+	[CmdletBinding()]
 	Param (
 		[Parameter(Mandatory = $true)]
 		[string]

@@ -1,4 +1,4 @@
-function Edit-bConnectDynamicGroup
+﻿function Edit-bConnectDynamicGroup
 {
 <#
 	.SYNOPSIS

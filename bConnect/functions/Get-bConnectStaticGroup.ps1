@@ -1,4 +1,4 @@
-function Get-bConnectStaticGroup
+﻿function Get-bConnectStaticGroup
 {
 <#
 	.SYNOPSIS

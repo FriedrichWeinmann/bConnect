@@ -1,0 +1,353 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>bConnect</name>
+    </assembly>
+    <members>
+        <member name="T:bConnect.Connection.CertificatePolicy">
+            <summary>
+            Custom Certificate Policy, in order to support overriding Endpoint validation
+            </summary>
+        </member>
+        <member name="M:bConnect.Connection.CertificatePolicy.CheckValidationResult(System.Net.ServicePoint,System.Security.Cryptography.X509Certificates.X509Certificate,System.Net.WebRequest,System.Int32)">
+            <summary>
+            Always returns true, in order to cheat certificate validation.
+            </summary>
+            <param name="sPoint"></param>
+            <param name="cert"></param>
+            <param name="wRequest"></param>
+            <param name="certProb"></param>
+            <returns></returns>
+        </member>
+        <member name="T:bConnect.Endpoints.EndpointOptions">
+            <summary>
+            The options an endpoint may have
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointOptions.AllowOSInstall">
+            <summary>
+            Allows installing an OS on it
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointOptions.AllowAutoInstall">
+            <summary>
+            Automatic installation of applications
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointOptions.UpdatePrimaryUserOnNextLogon">
+            <summary>
+            Update the next time the primary user logs on
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointOptions.AlwaysUpdatePrimaryUser">
+            <summary>
+            Always update when the primary user is logged on
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointOptions.NeverUpdatePrimaryUser">
+            <summary>
+            Never update while the porimary user is logged on
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointOptions.NeverExecuteUserRelatedJobs">
+            <summary>
+            Don't run code that is user specific
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointOptions.ExecuteUserRelatedJobsPrimaryUser">
+            <summary>
+            Execute user related tasks only when the primary user is logged on
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointOptions.AutomaticUsageTracking">
+            <summary>
+            Automatically track usage of something
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointOptions.EnergyManagement">
+            <summary>
+            Manage the energy options?
+            </summary>
+        </member>
+        <member name="T:bConnect.Endpoints.EndpointType">
+            <summary>
+            What kind of endpoint is out there
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointType.Unknown">
+            <summary>
+            The endpoint is an unknown quantity
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointType.WindowsEndpoint">
+            <summary>
+            A windows device
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointType.AndroidEndpoint">
+            <summary>
+            An Android device
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointType.iOSEndpoint">
+            <summary>
+            An iOS device
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointType.MacEndpoint">
+            <summary>
+            A Mac device
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointType.WindowsPhoneEndpoint">
+            <summary>
+            A windows phone (RIP)
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.EndpointType.NetworkEndpoint">
+            <summary>
+            Some kind of network device (Such as a switch or router)
+            </summary>
+        </member>
+        <member name="T:bConnect.Endpoints.PrimaryUserUpdateOption">
+            <summary>
+            Update options for the primary user
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.PrimaryUserUpdateOption.UpdateAtNextLogon">
+            <summary>
+            Update the next time the primary user logs on
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.PrimaryUserUpdateOption.DoNotUsePrimaryUser">
+            <summary>
+            Don't use the primary user to execute tasks
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.PrimaryUserUpdateOption.AlwaysUpdatePrimaryUser">
+            <summary>
+            Always update when the primary user is logged on
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.PrimaryUserUpdateOption.NeverUpdatePrimaryUser">
+            <summary>
+            Never update when the primary user is logged on
+            </summary>
+        </member>
+        <member name="T:bConnect.Endpoints.UserJobOptions">
+            <summary>
+            How to do user related jobs
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.UserJobOptions.AlwaysExecuteUserJobs">
+            <summary>
+            Waiting is for those without resolve
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.UserJobOptions.NeverExecuteUserJobs">
+            <summary>
+            Let's not do this
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.UserJobOptions.ExecuteUserRelatedJobsPrimaryUser">
+            <summary>
+            Only the boss can do this
+            </summary>
+        </member>
+        <member name="T:bConnect.Search.InventoryScanType">
+            <summary>
+            What to scan by
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.InventoryScanType.Unknown">
+            <summary>
+            Unknown type
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.InventoryScanType.Custom">
+            <summary>
+            Some custom type
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.InventoryScanType.WMI">
+            <summary>
+            Scan using WMI
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.InventoryScanType.Hardware">
+            <summary>
+            Hardware-based scan
+            </summary>
+        </member>
+        <member name="T:bConnect.Search.SearchResultType">
+            <summary>
+            The kind of data that was returned from search
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.Unknown">
+            <summary>
+            Something inexplicable
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.WindowsEndpoint">
+            <summary>
+            A windows Endpoint
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.AndroidEndpoint">
+            <summary>
+            An android Endpoint
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.iOSEndpoint">
+            <summary>
+            An iOS device
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.MacEndpoint">
+            <summary>
+            A MAC device
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.WindowsPhoneEndpoint">
+            <summary>
+            A windows phone
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.WindowsJob">
+            <summary>
+            A job running on windows
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.BmsNetJob">
+            <summary>
+            A BMS Network device job
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.OrgUnit">
+            <summary>
+            An organization unit
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.DynamicGroup">
+            <summary>
+            A dynamic group
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.StaticGroup">
+            <summary>
+            A static group
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.Application">
+            <summary>
+            An application
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.App">
+            <summary>
+            An App
+            </summary>
+        </member>
+        <member name="F:bConnect.Search.SearchResultType.NetworkEndpoint">
+            <summary>
+            A network endpoint
+            </summary>
+        </member>
+        <member name="T:bConnect.Variable.VariableScope">
+            <summary>
+            The scope a variable applies to
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableScope.Device">
+            <summary>
+            An individual device
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableScope.MobileDevice">
+            <summary>
+            A mobile device in particular
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableScope.OrgUnit">
+            <summary>
+            An organization unit
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableScope.Job">
+            <summary>
+            A job
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableScope.Software">
+            <summary>
+            To some software package
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableScope.HardwareProfile">
+            <summary>
+            To a given hardware profile
+            </summary>
+        </member>
+        <member name="T:bConnect.Variable.VariableType">
+            <summary>
+            What kind of variable are you
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.Unknown">
+            <summary>
+            Something inexplicable
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.Number">
+            <summary>
+            A plain number
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.String">
+            <summary>
+            Some piece of text
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.Date">
+            <summary>
+            A date (Like a timestamp, not like what you do with your girlfriend)
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.Checkbox">
+            <summary>
+            A checkbox that can be toggled on or off
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.Dropdownbox">
+            <summary>
+            A dropdown box
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.DropdownListbox">
+            <summary>
+            Like a dropdown box, only with multiple options to select
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.Filelink">
+            <summary>
+            A link to a specific file
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.Folder">
+            <summary>
+            A folder to put stuff in
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.Password">
+            <summary>
+            Credentials to use (be careful about securing those!)
+            </summary>
+        </member>
+        <member name="F:bConnect.Variable.VariableType.Certificate">
+            <summary>
+            A certificate
+            </summary>
+        </member>
+    </members>
+</doc>

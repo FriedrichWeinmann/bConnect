@@ -1,4 +1,4 @@
-Function Get-bConnectOrgUnit
+﻿Function Get-bConnectOrgUnit
 {
 <#
     .SYNOPSIS

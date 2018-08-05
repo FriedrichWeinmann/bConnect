@@ -1,33 +1,34 @@
-Function Search-bConnectJob() {
-    <#
-        .Synopsis
-            Search for specified jobs.
-        .Parameter Term
-            Searchterm for the search. Wildcards allowed.
-        .Outputs
-            Array of SearchResult (see bConnect documentation for more details)
-    #>
+﻿function Search-bConnectJob
+{
+<#
+	.SYNOPSIS
+		Search for specified jobs.
 	
-	Param (
+	.DESCRIPTION
+		Search for specified jobs.
+	
+	.PARAMETER Term
+		Searchterm for the search. Wildcards allowed.
+#>
+	[CmdletBinding()]
+	param (
 		[Parameter(Mandatory = $true)]
-		[string]$Term
+		[string]
+		$Term
 	)
 	
-	begin {
-		$Test = Test-bConnect
-		if ($Test -ne $true) {
-			$ErrorObject = New-Object System.Net.WebSockets.WebSocketException "$Test"
-			throw $ErrorObject
-		}
+	begin
+	{
+		Assert-bConnectConnection
 	}
 	
-	process {
-		$_body = @{
-			Type = "job";
+	process
+	{
+		$body = @{
+			Type = "job"
 			Term = $Term
 		}
 		
-		$Result = Invoke-bConnectGet -Controller "Search" -Data $_body | Where-Object { [string]::IsNullOrEmpty($_.ID) -eq $false } | Select-Object  @{ Name = "JobGuid"; Expression = { $_.ID } }, ID, Name, AdditionalInfo, @{ Name = "Type"; Expression = { [bConnectSearchResultType]$_.Type } }
-		$Result
+		Invoke-bConnectGet -Controller "Search" -Data $body | Where-Object ID -NE $false | Select-PSFObject 'ID as JobGuid', ID, Name, AdditionalInfo, 'Type to bConnectSearchResultType'
 	}
 }

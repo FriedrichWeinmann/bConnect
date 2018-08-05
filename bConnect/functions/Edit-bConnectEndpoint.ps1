@@ -1,5 +1,4 @@
-
-function Edit-bConnectEndpoint
+﻿function Edit-bConnectEndpoint
 {
 <#
 	.SYNOPSIS
@@ -35,12 +34,12 @@ function Edit-bConnectEndpoint
 				# So we need to create a new one with editable fields only...
 				# And as this might be too easy we face another problem: we are only allowed to send the changed fields :(
 				# Dirty workaround: reload the object and compare new vs. old
-				$_old_endpoint = Get-bConnectEndpoint -EndpointGuid $endpointItem.Id
-				$_old_endpoint = ConvertTo-Hashtable $_old_endpoint
+				$oldEndpoint = Get-bConnectEndpoint -EndpointGuid $endpointItem.Id
+				$oldEndpoint = ConvertTo-Hashtable $oldEndpoint
 				
 				# common properties
-				$_new_endpoint = @{ Id = $endpointItem.Id }
-				$_propertyList = @(
+				$newEndpoint = @{ Id = $endpointItem.Id }
+				$propertyList = @(
 					"DisplayName",
 					"GuidOrgUnit"
 				)
@@ -49,7 +48,7 @@ function Edit-bConnectEndpoint
 				# Windows
 				if ($endpointItem.Type -eq [bConnectEndpointType]::WindowsEndpoint)
 				{
-					$_propertyList += @(
+					$propertyList += @(
 						"HostName",
 						"Options",
 						"PrimaryMAC",
@@ -67,7 +66,7 @@ function Edit-bConnectEndpoint
 					($endpointItem.Type -eq [bConnectEndpointType]::WindowsPhoneEndpoint) -or
 					($endpointItem.Type -eq [bConnectEndpointType]::MacEndpoint))
 				{
-					$_propertyList += @(
+					$propertyList += @(
 						"PrimaryUser",
 						"Owner",
 						"ComplianceCheckCategory"
@@ -77,22 +76,22 @@ function Edit-bConnectEndpoint
 				# OSX
 				if ($endpointItem.Type -eq [bConnectEndpointType]::MacEndpoint)
 				{
-					$_propertyList += @(
+					$propertyList += @(
 						"HostName"
 					)
 				}
 				
-				foreach ($_property in $_propertyList)
+				foreach ($_property in $propertyList)
 				{
-					if ($endpointItem[$_property] -ine $_old_endpoint[$_property])
+					if ($endpointItem[$_property] -ine $oldEndpoint[$_property])
 					{
-						$_new_endpoint += @{ $_property = $endpointItem[$_property] }
+						$newEndpoint += @{ $_property = $endpointItem[$_property] }
 					}
 				}
 				
 				if ($pscmdlet.ShouldProcess($endpointItem.Id, "Edit Endpoint"))
 				{
-					$Result = Invoke-bConnectPatch -Controller "Endpoints" -objectGuid $endpointItem.Id -Data $_new_endpoint | Select-Object  @{ Name = "EndpointGuid"; Expression = { $_.ID } }, *
+					$Result = Invoke-bConnectPatch -Controller "Endpoints" -objectGuid $endpointItem.Id -Data $newEndpoint | Select-Object  @{ Name = "EndpointGuid"; Expression = { $_.ID } }, *
 					$Result | ForEach-Object {
 						if ($_.PSObject.Properties.Name -contains 'ID')
 						{
@@ -107,7 +106,7 @@ function Edit-bConnectEndpoint
 				else
 				{
 					Write-Verbose -Message "Edit Endpoint"
-					foreach ($k in $_new_endpoint.Keys) { Write-Verbose -Message "$k : $($_new_endpoint[$k])" }
+					foreach ($k in $newEndpoint.Keys) { Write-Verbose -Message "$k : $($newEndpoint[$k])" }
 				}
 			}
 		}

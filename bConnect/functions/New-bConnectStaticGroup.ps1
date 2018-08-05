@@ -1,69 +1,67 @@
+﻿function New-bConnectStaticGroup
+{
 <#
-	.Synopsis
+	.SYNOPSIS
 		Create a new StaticGroup.
 	
 	.DESCRIPTION
-		A detailed description of the New-bConnectStaticGroup function.
+		Create a new StaticGroup.
 	
-	.Parameter Name
+	.PARAMETER Name
 		Name of the StaticGroup.
 	
-	.Parameter ParentGuid
+	.PARAMETER ParentGuid
 		Valid GUID of the parent OrgUnit in hierarchy (default: "Static Groups").
 	
-	.Parameter Endpoints
+	.PARAMETER Endpoints
 		Array of Endpoints.
 	
-	.Parameter Comment
+	.PARAMETER Comment
 		Comment for the StaticGroup.
-	
-	.Outputs
-		StaticGroup (see bConnect documentation for more details).
-	
-	.NOTES
-		Additional information about the function.
 #>
-function New-bConnectStaticGroup {
 	[CmdletBinding()]
 	param
 	(
 		[Parameter(Mandatory = $true)]
-		[string]$Name,
-		[string]$ParentGuid = "5020494B-04D3-4654-A256-80731E953746",
+		[string]
+		$Name,
+		
+		[string]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		$ParentGuid = "5020494B-04D3-4654-A256-80731E953746",
+		
 		[Parameter(ValueFromPipelineByPropertyName = $true)]
 		[Alias('EndpointGuid')]
-		[string[]]$Endpoints,
-		[string]$Comment
+		[string[]]
+		$Endpoints,
+		
+		[string]
+		$Comment
 	)
 	
-	begin {
-		$Test = Test-bConnect
+	begin
+	{
+		Assert-bConnectConnection
 		
-		if ($Test -ne $true) {
-			$ErrorObject = New-Object System.Net.WebSockets.WebSocketException "$Test"
-			throw $ErrorObject
-		}
-		$_body = @{
+		$body = @{
 			Name	 = $Name;
 			ParentId = $ParentGuid;
 		}
-		If (![string]::IsNullOrEmpty($Comment)) {
-			$_body += @{ Comment = $Comment }
-		}
-		$_Endpoints = @()
+		if ($Comment) { $body['Comment'] = $Comment }
+		$endpointList = @()
 	}
 	
-	process {
-		
-		If (![string]::IsNullOrEmpty($Endpoints)) {
-			$_Endpoints += $Endpoints
+	process
+	{
+		foreach ($endpointItem in $Endpoints)
+		{
+			$endpointList += $endpointItem
 		}
-		
-		
 	}
 	
-	end {
-		$_body += @{ EndPointIds = $_Endpoints }
-		return Invoke-bConnectPost -Controller "StaticGroups" -Data $_body
+	end
+	{
+		$body['EndPointIds'] = $endpointList
+		Invoke-bConnectPost -Controller "StaticGroups" -Data $body
 	}
 }

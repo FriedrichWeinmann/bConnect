@@ -1,4 +1,4 @@
-Function Initialize-bConnect
+﻿Function Initialize-bConnect
 {
 <#
 	.Synopsis

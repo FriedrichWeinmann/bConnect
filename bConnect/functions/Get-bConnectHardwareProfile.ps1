@@ -1,4 +1,4 @@
-Function Get-bConnectHardwareProfile
+﻿Function Get-bConnectHardwareProfile
 {
 <#
     .SYNOPSIS

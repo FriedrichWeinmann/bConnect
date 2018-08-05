@@ -1,4 +1,4 @@
-function Get-bConnectVariable
+﻿function Get-bConnectVariable
 {
 <#
 	.SYNOPSIS

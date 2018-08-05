@@ -1,90 +1,98 @@
-function Set-bConnectEndpointOption {
-	[CmdletBinding(ConfirmImpact = 'Medium',
-				   SupportsShouldProcess = $true)]
+ï»¿function Set-bConnectEndpointOption
+{
+<#
+	.SYNOPSIS
+		Sets the options on an endpoint.
+	
+	.DESCRIPTION
+		Sets the options on an endpoint.
+#>
+	[CmdletBinding(ConfirmImpact = 'Medium', SupportsShouldProcess = $true)]
 	param
 	(
-		[Parameter(Mandatory = $true,
-			 ValueFromPipelineByPropertyName = $true)]
+		[Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
 		[Alias('EndpointIds')]
-		[string[]]$EndpointGuid,
-		[Parameter(Mandatory = $false)]
-		[switch]$AllowOSInstall,
-		[Parameter(Mandatory = $false)]
-		[switch]$InheritAutoInstallation,
-		[Parameter(Mandatory = $false)]
-		[switch]$ActivateUsageTracking,
-		[Parameter(Mandatory = $false)]
-		[switch]$ActivateEnergyManagement,
-		[bConnectEndpointprimaryUserUpdateOption]$PrimaryUserUpdateOptions,
-		[bConnectEndpointUserJobOptions]$UserJobOptions
+		[string[]]
+		$EndpointGuid,
+		
+		[switch]
+		$AllowOSInstall,
+		
+		[switch]
+		$InheritAutoInstallation,
+		
+		[switch]
+		$ActivateUsageTracking,
+		
+		[switch]
+		$ActivateEnergyManagement,
+		
+		[bConnectEndpointprimaryUserUpdateOption]
+		$PrimaryUserUpdateOptions,
+		
+		[bConnectEndpointUserJobOptions]
+		$UserJobOptions
 	)
 	
-	begin {
-		$Test = Test-bConnect
-		
-		if ($Test -ne $true) {
-			$ErrorObject = New-Object System.Net.WebSockets.WebSocketException "$Test"
-			throw $ErrorObject
-		}
+	begin
+	{
+		Assert-bConnectConnection
 	}
 	
-	process {
-		
-		foreach ($_Endpoint in $EndpointGuid) {
-
-			$Endpoint = Get-bConnectEndpoint -EndpointGuid $_Endpoint
-			#[EndPointOptions]$OldOptions = $Endpoint.Options
+	process
+	{
+		foreach ($endpointGuidItem in $EndpointGuid)
+		{
+			$endpoint = Get-bConnectEndpoint -EndpointGuid $endpointGuidItem
 			
-			
-			If ($Endpoint.Type -eq [bConnectEndpointType]::WindowsEndpoint) {
-				If ($Endpoint.Options -lt [int32]::MaxValue) {
-					$EndpointOption = Get-bConnectEndpointOption -EndpointGuid $Endpoint.EndpointGuid
-					
-					if ($PSBoundParameters.ContainsKey('AllowOSInstall')) {
-						Write-Verbose "Aktiviere OS Install"
-						[bool]$EndpointOption.AllowOSInstall = $AllowOSInstall
-					}
-					if ($PSBoundParameters.ContainsKey('$InheritAutoInstallation')) {
-						Write-Verbose "Aktiviere AutoInstallation"
-						[bool]$EndpointOption.AllowAutoInstall = $AllowAutoInstall
-					}
-					if ($PSBoundParameters.ContainsKey('ActivateUsageTracking')) {
-						Write-Verbose "Aktiviere ActivateUsageTracking"
-						[bool]$EndpointOption.ActivateUsageTracking = $ActivateUsageTracking
-					}
-					if ($PSBoundParameters.ContainsKey('ActivateEnergyManagement')) {
-						Write-Verbose "Aktiviere ActivateEnergyManagement"
-						[bool]$EndpointOption.ActivateEnergyManagement = $ActivateEnergyManagement
-					}
-					
-					# Erzeuge Bitwert
-					[string]$NewOptions = ""
-					# Durchlaufe alle boolean Werte
-					$NewOptions = $($EndpointOption.PSObject.Properties | Where-Object { $_.TypeNameOfValue -eq "System.Boolean" -and $_.Value -eq $true }).Name -join ","
-					# Auslesen der Einstellungen für UserJob und UserUpdate
-					$NewOptions = "$NewOptions, $($($EndpointOption.PSObject.Properties | Where-Object { $_.TypeNameOfValue -eq "bConnectEndpointPrimaryUserUpdateOption" -or $_.TypeNameOfValue -eq "bConnectEndpointUserJobOptions" }).Value -join ",")"
-					# Konvertieren in BitArray
-					[EndPointOptions]$NewOptions = $NewOptions
-					
-					$Endpoint.Options = $NewOptions.Value__;
-					
-					if ($pscmdlet.ShouldProcess($Endpoint.EndpointGuid, "Set Endpoint Option")) {
-						Edit-bConnectEndpoint -endpointItem $Endpoint
-					}
-					Else {
-						Write-Verbose "Old Option Value: $OldOptions"
-						Write-Verbose "New Option Value: $NewOptions"
-					}
-					
-				}
-				Else {
-					Write-Warning -Message "Client ist deaktivert und wird übersprungen: $($Endpoint.EndpointGuid)"
-				}
+			if ($endpoint.Type -ne [bConnectEndpointType]::WindowsEndpoint)
+			{
+				Stop-PSFFunction -Message "Es wurde kein gÃ¼ltiger Windows Endpunkt gefunden" -Continue -Target $endpoint 
 			}
-			Else {
-				Write-Warning -Message "Es wurde kein gültiger Windows Endpunkt gefunden"
-				return $false
+			if ($endpoint.Options -ge [int32]::MaxValue)
+			{
+				Stop-PSFFunction -Message "Client ist deaktivert und wird Ã¼bersprungen: $($endpoint.EndpointGuid)" -Continue -Target $endpoint
+			}
+			
+			$endpointOption = Get-bConnectEndpointOption -EndpointGuid $endpoint.EndpointGuid
+			
+			if (Test-PSFParameterBinding -ParameterName 'AllowOSInstall')
+			{
+				Write-PSFMessage -Level Verbose -Message "Activating OS Install: $AllowOSInstall" -Target $endpoint
+				$endpointOption.AllowOSInstall = $AllowOSInstall.ToBool()
+			}
+			if (Test-PSFParameterBinding -ParameterName '$InheritAutoInstallation')
+			{
+				Write-PSFMessage -Level Verbose -Message "Activating AutoInstallation: $AllowAutoInstall" -Target $endpoint
+				$endpointOption.AllowAutoInstall = $AllowAutoInstall.ToBool()
+			}
+			if (Test-PSFParameterBinding -ParameterName 'ActivateUsageTracking')
+			{
+				Write-PSFMessage -Level Verbose -Message "Activating ActivateUsageTracking: $ActivateUsageTracking" -Target $endpoint
+				$endpointOption.ActivateUsageTracking = $ActivateUsageTracking.ToBool()
+			}
+			if (Test-PSFParameterBinding -ParameterName 'ActivateEnergyManagement')
+			{
+				Write-PSFMessage -Level Verbose -Message "Activating ActivateEnergyManagement: $ActivateEnergyManagement" -Target $endpoint
+				$endpointOption.ActivateEnergyManagement = $ActivateEnergyManagement
+			}
+			
+			[string]$newOptions = ""
+			
+			$newOptions = $($endpointOption.PSObject.Properties | Where-Object { $_.TypeNameOfValue -eq "System.Boolean" -and $_.Value -eq $true }).Name -join ","
+			$newOptions = "$newOptions, $($($endpointOption.PSObject.Properties | Where-Object { $_.TypeNameOfValue -eq "bConnectEndpointPrimaryUserUpdateOption" -or $_.TypeNameOfValue -eq "bConnectEndpointUserJobOptions" }).Value -join ",")"
+			[EndPointOptions]$newOptions = $newOptions
+			[EndPointOptions]$oldOptions = $endpoint.Options
+			
+			$endpoint.Options = $newOptions.Value__
+			
+			Write-PSFMessage -Level Verbose -Message "Changing options from '$oldOptions' to '$newOptions'" -Target $endpoint
+			if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $endpoint.EndpointGuid -Action 'Set Endpoint Option')
+			{
+				Edit-bConnectEndpoint -Endpoint $endpoint
 			}
 		}
 	}
+}
+}
 }

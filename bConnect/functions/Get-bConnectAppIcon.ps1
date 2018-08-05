@@ -1,4 +1,4 @@
-function Get-bConnectAppIcon
+﻿function Get-bConnectAppIcon
 {
 <#
 	.SYNOPSIS
@@ -18,7 +18,7 @@ function Get-bConnectAppIcon
 #>
 	param
 	(
-		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Faild to parse input as guid: {0}')]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
 		[string]
 		$AppGuid,
 		

@@ -1,4 +1,4 @@
-Function New-bConnectApplicationFile
+﻿Function New-bConnectApplicationFile
 {
 <#
 	.Synopsis

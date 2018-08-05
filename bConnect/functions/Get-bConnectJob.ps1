@@ -1,4 +1,4 @@
-function Get-bConnectJob
+﻿function Get-bConnectJob
 {
 <#
 	.Synopsis

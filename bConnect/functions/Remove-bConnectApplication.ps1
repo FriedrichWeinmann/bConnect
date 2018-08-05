@@ -1,42 +1,52 @@
-Function Remove-bConnectApplication() {
-    <#
-        .Synopsis
-            Remove specified application.
-        .Parameter ApplicationGuid
-            Valid GUID of a application.
-        .Parameter Application
-            Valid Application object
-        .Outputs
-            Bool
-    #>
-	[CmdletBinding(SupportsShouldProcess = $true)]
-	Param (
-		[Parameter(ValueFromPipelineByPropertyName = $true)]	
-		[ValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b')]
-		[string]$ApplicationGuid,
-		[PSCustomObject]$Application
+﻿function Remove-bConnectApplication
+{
+<#
+	.SYNOPSIS
+		Remove specified application.
+	
+	.DESCRIPTION
+		Remove specified application.
+	
+	.PARAMETER ApplicationGuid
+		Valid GUID of a application.
+	
+	.PARAMETER Application
+		Valid Application object
+#>
+	[CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'AppID')]
+	param (
+		[Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'AppID')]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		[string]
+		$ApplicationGuid,
+		
+		[Parameter(Mandatory = $true, ParameterSetName = 'App')]
+		[PSCustomObject]
+		$Application
 	)
 	
-	$_connectVersion = Get-bConnectVersion
-	If ($_connectVersion -ge "1.0") {
-		If (![string]::IsNullOrEmpty($ApplicationGuid)) {
-			$_body = @{
-				Id    = $ApplicationGuid
-			}
-		}
-		elseif (![string]::IsNullOrEmpty($Application.Id)) {
-			$_body = @{
-				Id    = $Application.Id
-			}
-		}
-		else {
-			return $false
-		}
-		if ($pscmdlet.ShouldProcess($ApplicationGuid, "Remove Application")) {
-			return Invoke-bConnectDelete -Controller "Applications" -Data $_body
-		}
+	begin
+	{
+		Assert-bConnectConnection
 	}
-	else {
-		return $false
+	process
+	{
+		if ($ApplicationGuid)
+		{
+			$body = @{
+				Id = $ApplicationGuid
+			}
+		}
+		else
+		{
+			$body = @{
+				Id = $Application.Id
+			}
+		}
+		
+		if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $ApplicationGuid -Action 'Remove-Application')
+		{
+			Invoke-bConnectDelete -Controller "Applications" -Data $body
+		}
 	}
 }

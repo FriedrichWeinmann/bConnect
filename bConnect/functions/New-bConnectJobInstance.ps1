@@ -1,36 +1,49 @@
-Function New-bConnectJobInstance() {
-    <#
-        .Synopsis
-            Assign the specified job to a endpoint.
-        .Parameter EndpointGuid
-            Valid GUID of a endpoint.
-        .Parameter JobGuid
-            Valid GUID of a job.
-        .Parameter StartIfExists
-            Restart the existing jobinstance if there is one.
-        .Outputs
-            JobInstance (see bConnect documentation for more details).
-    #>
+﻿function New-bConnectJobInstance
+{
+<#
+	.SYNOPSIS
+		Assign the specified job to a endpoint.
 	
-	Param (
+	.DESCRIPTION
+		Assign the specified job to a endpoint.
+	
+	.PARAMETER EndpointGuid
+		Valid GUID of a endpoint.
+	
+	.PARAMETER JobGuid
+		Valid GUID of a job.
+	
+	.Parameter StartIfExists
+		Restart the existing jobinstance if there is one.
+#>
+	[CmdletBinding()]
+	param (
 		[Parameter(Mandatory = $true)]
-		[string]$EndpointGuid,
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		[string]
+		$EndpointGuid,
+		
 		[Parameter(Mandatory = $true)]
-		[string]$JobGuid,
-		[switch]$StartIfExists
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		[string]
+		$JobGuid,
+		
+		[switch]
+		$StartIfExists
 	)
 	
-	$_connectVersion = Get-bConnectVersion
-	If ($_connectVersion -ge "1.0") {
-		$_body = @{
-			EndpointId	     = $EndpointGuid;
-			JobId		     = $JobGuid;
-			StartIfExists    = $StartIfExists.ToString()
+	begin
+	{
+		Assert-bConnectConnection
+	}
+	process
+	{
+		$body = @{
+			EndpointId    = $EndpointGuid;
+			JobId		  = $JobGuid;
+			StartIfExists = $StartIfExists.ToString()
 		}
 		
-		return Invoke-bConnectGet -Controller "JobInstances" -Data $_body
-	}
-	else {
-		return $false
+		Invoke-bConnectGet -Controller "JobInstances" -Data $body
 	}
 }

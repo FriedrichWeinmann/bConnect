@@ -1,15 +1,30 @@
-Function ConvertTo-Hashtable {
-	Param (
-		[Parameter(Mandatory, ValueFromPipeline)]
-		[PSObject[]]$Object
+﻿function ConvertTo-Hashtable
+{
+<#
+	.SYNOPSIS
+		Converts objects to hashtables
+	
+	.DESCRIPTION
+		Converts objects to hashtables
+	
+	.PARAMETER Object
+		The object(s) to convert to a hashtable
+#>
+	[CmdletBinding()]
+	param (
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+		[PSObject[]]
+		$Object
 	)
-	Process {
-		foreach ($obj in $Object) {
-			$ht = [ordered]@{ }
-			$obj | Get-Member -MemberType *Property | ForEach-Object {
-				$ht.($_.Name) = $obj.($_.Name)
+	process
+	{
+		foreach ($objectItem in $Object)
+		{
+			$hashtable = [ordered]@{ }
+			$objectItem | Get-Member -MemberType *Property | ForEach-Object {
+				$hashtable[$_.Name] = $_.Value
 			}
-			$ht
+			$hashtable
 		}
 	}
 }

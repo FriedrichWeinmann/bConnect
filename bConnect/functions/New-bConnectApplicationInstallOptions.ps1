@@ -1,4 +1,4 @@
-Function New-bConnectApplicationInstallOptions()
+﻿Function New-bConnectApplicationInstallOptions()
 {
 <#
 	.SYNOPSIS

@@ -1,64 +1,66 @@
+﻿function Search-bConnectApplication
+{
 <#
-	.Synopsis
+	.SYNOPSIS
 		Search for specified applications and apps.
 	
 	.DESCRIPTION
-		A detailed description of the Search-bConnectApplication function.
+		Search for specified applications and apps.
 	
-	.Parameter Term
+	.PARAMETER Term
 		Searchterm for the search. Wildcards allowed.
-	
-	.PARAMETER OnlySoftware
-		A description of the OnlySoftware parameter.
-	
-	.PARAMETER OnlyApps
-		A description of the OnlyApps parameter.
-	
-	.Outputs
-		Array of SearchResult (see bConnect documentation for more details)
-	
-	.NOTES
-		Additional information about the function.
-#>
-function Search-bConnectApplication {
+#>	
 	[CmdletBinding()]
 	param
 	(
 		[Parameter(Mandatory = $true)]
-		[string]$Term,
-		[Parameter(ParameterSetName = 'SearchApps',
-				   Mandatory = $false)]
-		[Switch]$OnlySoftware,
+		[string]
+		$Term,
+		
+		[Parameter(ParameterSetName = 'SearchApps')]
+		[Switch]
+		$OnlySoftware,
+		
 		[Parameter(ParameterSetName = 'SearchSoftware')]
-		[switch]$OnlyApps
+		[switch]
+		$OnlyApps
 	)
 	
-	begin {
-		$Test = Test-bConnect
-		if ($Test -ne $true) {
-			$ErrorObject = New-Object System.Net.WebSockets.WebSocketException "$Test"
-			throw $ErrorObject
+	begin
+	{
+		Assert-bConnectConnection
+		
+		#region Filter
+		$applicationFilter = {
+			if (-not $_.ID) { return $false }
+			if ($OnlySoftware)
+			{
+				if (-not ($_.Type -eq [bConnectSearchResultType]::Application))
+				{
+					return $false
+				}
+			}
+			if ($OnlyApps)
+			{
+				if (-not ($_.Type -eq [bConnectSearchResultType]::App))
+				{
+					return $false
+				}
+			}
+			
+			$true
 		}
+		#endregion Filter
 	}
-	
-	process {
-		$_body = @{
-			Type = "software";
+	process
+	{
+		$body = @{
+			Type = "software"
 			Term = $Term
 		}
 		
-		$WhereArray = @()
-		$WhereArray += '[string]::IsNullOrEmpty($_.ID) -eq $false'
-		if ($OnlySoftware) {
-			$WhereArray += '$_.Type -eq [bConnectSearchResultType]::Application'
-		}
-		if ($OnlyApps) {
-			$WhereArray += '$_.Type -eq [bConnectSearchResultType]::App'
-		}
-		$WhereString = $WhereArray -Join " -and "
-		$WhereBlock = [scriptblock]::Create($WhereString)
-			
-		$Result = Invoke-bConnectGet -Controller "Search" -Data $_body | Where-Object -FilterScript $WhereBlock | Select-Object  @{ Name = "ApplicationGuid"; Expression = { $_.ID } }, ID, Name, AdditionalInfo, @{ Name = "Type"; Expression = { [bConnectSearchResultType]$_.Type } }
-		$Result
+		Invoke-bConnectGet -Controller "Search" -Data $body |
+		Where-Object -FilterScript $applicationFilter |
+		Select-PSFObject 'ID as ApplicationGuid', ID, Name, AdditionalInfo, 'Type to bConnectSearchResultType'
 	}
 }

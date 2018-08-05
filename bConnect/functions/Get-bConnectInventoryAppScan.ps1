@@ -1,4 +1,4 @@
-function Get-bConnectInventoryAppScan
+﻿function Get-bConnectInventoryAppScan
 {
 <#
 	.SYNOPSIS

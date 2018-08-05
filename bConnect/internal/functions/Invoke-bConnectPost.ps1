@@ -1,77 +1,105 @@
-Function Invoke-bConnectPost() {
-    <#
-        .Synopsis
-            INTERNAL - HTTP-POST against bConnect
-        .Parameter Data
-            Hashtable with parameters
-        .Parameter Version
-            bConnect version to use
-    #>
+﻿function Invoke-bConnectPost
+{
+<#
+	.SYNOPSIS
+		HTTP-POST against bConnect
 	
-	Param (
+	.DESCRIPTION
+		HTTP-POST against bConnect
+	
+	.PARAMETER Controller
+		A description of the Controller parameter.
+	
+	.PARAMETER Data
+		Hashtable with parameters
+	
+	.PARAMETER Version
+		bConnect version to use
+#>	
+	param (
 		[Parameter(Mandatory = $true)]
-		[string]$Controller,
+		[string]
+		$Controller,
+		
 		[Parameter(Mandatory = $true)]
-		[PSCustomObject]$Data,
-		[string]$Version
+		[PSCustomObject]
+		$Data,
+		
+		[string]
+		$Version
 	)
 	
-	If (!$script:_connectInitialized) {
+	if (!$script:_connectInitialized)
+	{
 		Write-Error "bConnect module is not initialized. Use 'Initialize-bConnect' first!"
 		return $false
 	}
 	
-	If ([string]::IsNullOrEmpty($Version)) {
+	if (-not $Version)
+	{
 		$Version = $script:_bConnectFallbackVersion
 	}
 	
-	If ($verbose) {
+	if ($verbose)
+	{
 		$ProgressPreference = "Continue"
 	}
-	else {
+	else
+	{
 		$ProgressPreference = "SilentlyContinue"
 	}
 	
-	try {
-		If ($Data.Count -gt 0) {
-			$_body = ConvertTo-Json $Data
+	try
+	{
+		if ($Data.Count -gt 0)
+		{
+			$body = ConvertTo-Json $Data
 			
-			$_rest = Invoke-RestMethod -Uri "$($script:_connectUri)/$($Version)/$($Controller)" -Body $_body -Credential $script:_connectCredentials -Method Post -ContentType "application/json"
-			If ($_rest) {
-				return $_rest
+			$result = Invoke-RestMethod -Uri "$($script:_connectUri)/$($Version)/$($Controller)" -Body $body -Credential $script:_connectCredentials -Method Post -ContentType "application/json"
+			if ($result)
+			{
+				return $result
 			}
-			else {
+			else
+			{
 				return $true
 			}
 		}
-		else {
+		else
+		{
 			return $false
 		}
 	}
 	
-	catch {
-		$_errMsg = ""
+	catch
+	{
+		$errorMessage = ""
 		
-		Try {
-			$_response = ConvertFrom-Json $_
+		try
+		{
+			$response = ConvertFrom-Json $_
 		}
 		
-		Catch {
-			$_response = $false
+		catch
+		{
+			$response = $false
 		}
 		
-		If ($_response) {
-			$_errMsg = $_response.Message
+		if ($response)
+		{
+			$errorMessage = $response.Message
 		}
-		else {
-			$_errMsg = $_
-		}
-		
-		If ($_body) {
-			$_errMsg = "$($_errMsg) `nHashtable: $($_body)"
+		else
+		{
+			$errorMessage = $_
 		}
 		
-		Throw $_errMsg
+		if ($body)
+		{
+			$errorMessage = "$($errorMessage) `nHashtable: $($body)"
+		}
+		
+		throw $errorMessage
 		
 		return $false
 	}

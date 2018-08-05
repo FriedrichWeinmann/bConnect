@@ -1,4 +1,4 @@
-Function New-bConnectDynamicGroup
+﻿Function New-bConnectDynamicGroup
 {
 <#
 	.SYNOPSIS

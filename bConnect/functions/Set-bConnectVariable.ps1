@@ -1,77 +1,77 @@
+﻿function Set-bConnectVariable
+{
 <#
-	.Synopsis
+	.SYNOPSIS
 		Set variable for a object.
 
 	.DESCRIPTION
-		A detailed description of the Set-bConnectVariable function.
+		Set variable for a object.
 
-	.Parameter ObjectGuid
+	.PARAMETER ObjectGuid
 		Valid GUID of an object.
 
-	.Parameter Scope
+	.PARAMETER Scope
 		enum bConnectVariableScope.
 
-	.Parameter Category
+	.PARAMETER Category
 		Valid variable category.
 
-	.Parameter Name
+	.PARAMETER Name
 		Valid variable name.
 
-	.Parameter Value
+	.PARAMETER Value
 		New value.
-
-	.PARAMETER UseDefault
-		A description of the UseDefault parameter.
-
-	.Outputs
-		Bool
-
-	.NOTES
-		Additional information about the function.
-#>
-function Set-bConnectVariable {
+#>	
+	[CmdletBinding()]
 	param
 	(
-		[Parameter(Mandatory = $true,
-				   ValueFromPipelineByPropertyName = $true)]
+		[Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
 		[Alias('EndpointGuid')]
-		[string]$ObjectGuid,
+		[string]
+		$ObjectGuid,
+		
 		[Parameter(Mandatory = $true)]
-		[string]$Scope,
+		[bConnectVariableScope]
+		$Scope,
+		
 		[Parameter(Mandatory = $true)]
-		[string]$Category,
+		[string]
+		$Category,
+		
 		[Parameter(Mandatory = $true)]
-		[string]$Name,
+		[string]
+		$Name,
+		
 		[Parameter(Mandatory = $true)]
-		[string]$Value,
-		[switch]$UseDefault
+		[string]
+		$Value,
+		
+		[switch]
+		$UseDefault
 	)
-
-	BEGIN {
-		$Test = Test-bConnect
-
-		If ($Test -ne $true) {
-			$ErrorObject = New-Object System.Net.WebSockets.WebSocketException "$Test"
-			Throw $ErrorObject
-		}
+	
+	begin
+	{
+		Assert-bConnectConnection
 	}
-	PROCESS {
-		$_variable = @{
-			Category   = $Category;
-			Name	   = $Name;
-			UseDefault = $UseDefault.ToString();
+	process
+	{
+		$variable = @{
+			Category   = $Category
+			Name	   = $Name
+			UseDefault = $UseDefault.ToString()
 			Value	   = $Value
 		}
-
-		$_variables = @($_variable)
-
-		$_body = @{
-			ObjectId  = $ObjectGuid;
-			Scope	  = $Scope;
-			Variables = $_variables
+		
+		$variables = @($variable)
+		
+		$body = @{
+			ObjectId  = $ObjectGuid
+			Scope	  = $Scope
+			Variables = $variables
 		}
-
-		$Result = Invoke-bConnectPut -Controller "Variables" -Data $_body
-		$Result
+		
+		Invoke-bConnectPut -Controller "Variables" -Data $body
 	}
 }

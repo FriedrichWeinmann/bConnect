@@ -1,29 +1,36 @@
-Function Remove-bConnectDynamicGroup() {
-    <#
-        .Synopsis
-            Remove specified DynamicGroup.
-        .Parameter DynamicGroupGuid
-            Valid GUID of a DynamicGroup.
-        .Outputs
-            Bool
-    #>
+﻿function Remove-bConnectDynamicGroup
+{
+<#
+	.SYNOPSIS
+		Remove specified DynamicGroup.
+	
+	.DESCRIPTION
+		Remove specified DynamicGroup.
+	
+	.PARAMETER DynamicGroupGuid
+		Valid GUID of a DynamicGroup.
+#>
 	[CmdletBinding(SupportsShouldProcess = $true)]
-	Param (
-		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]	
-		[ValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b')]
-		[string]$DynamicGroupGuid
+	param (
+		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		[string]
+		$DynamicGroupGuid
 	)
 	
-	$_connectVersion = Get-bConnectVersion
-	If ($_connectVersion -ge "1.0") {
-		$_body = @{
-			Id    = $DynamicGroupGuid
-		}
-		if ($pscmdlet.ShouldProcess($DynamicGroupGuid, "Remove DynamicGroup")) {
-			return Invoke-bConnectDelete -Controller "DynamicGroups" -Data $_body
-		}
+	begin
+	{
+		Assert-bConnectConnection
 	}
-	else {
-		return $false
+	process
+	{
+		$body = @{
+			Id = $DynamicGroupGuid
+		}
+		
+		if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $DynamicGroupGuid -Action 'Remove dynamic group')
+		{
+			Invoke-bConnectDelete -Controller "DynamicGroups" -Data $body
+		}
 	}
 }

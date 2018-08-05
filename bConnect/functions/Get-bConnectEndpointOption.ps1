@@ -1,4 +1,4 @@
-function Get-bConnectEndpointOption
+﻿function Get-bConnectEndpointOption
 {
 <#
 	.SYNOPSIS

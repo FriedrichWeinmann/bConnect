@@ -1,17 +1,26 @@
-Function Invoke-bConnectGet
+﻿function Invoke-bConnectGet
 {
-    <#
-        .Synopsis
-            INTERNAL - HTTP-GET against bConnect
-        .Parameter Data
-            Hashtable with parameters
-        .Parameter Version
-            bConnect version to use
-        .Parameter NoVersion
-            Dont use a version in the request. Needed for "info" and "version"
-    #>
+<#
+	.SYNOPSIS
+		HTTP-GET against bConnect
+	
+	.DESCRIPTION
+		HTTP-GET against bConnect
+	
+	.PARAMETER Controller
+		A description of the Controller parameter.
+	
+	.PARAMETER Data
+		Hashtable with parameters
+	
+	.PARAMETER Version
+		bConnect version to use
+	
+	.PARAMETER NoVersion
+		Dont use a version in the request. Needed for "info" and "version"
+#>
 	[CmdletBinding()]
-	Param (
+	param (
 		[Parameter(Mandatory = $true)]
 		[string]
 		$Controller,
@@ -26,18 +35,18 @@ Function Invoke-bConnectGet
 		$NoVersion
 	)
 	
-	If (!$script:_connectInitialized)
+	if (!$script:_connectInitialized)
 	{
 		Write-Error "bConnect module is not initialized. Use 'Initialize-bConnect' first!"
 		return $false
 	}
 	
-	If ([string]::IsNullOrEmpty($Version))
+	if (-not $Version)
 	{
 		$Version = $script:_bConnectFallbackVersion
 	}
 	
-	If ($verbose)
+	if ($verbose)
 	{
 		$ProgressPreference = "Continue"
 	}
@@ -46,29 +55,29 @@ Function Invoke-bConnectGet
 		$ProgressPreference = "SilentlyContinue"
 	}
 	
-	If ($NoVersion)
+	if ($NoVersion)
 	{
-		$_uri = "$($script:_connectUri)/$($Controller)"
+		$uri = "$($script:_connectUri)/$($Controller)"
 	}
 	else
 	{
-		$_uri = "$($script:_connectUri)/$($Version)/$($Controller)"
+		$uri = "$($script:_connectUri)/$($Version)/$($Controller)"
 	}
 	
 	try
 	{
-		If ($Data.Count -gt 0)
+		if ($Data.Count -gt 0)
 		{
-			$_rest = Invoke-RestMethod -Uri $_uri -Body $Data -Credential $script:_connectCredentials -Method Get -ContentType "application/json" -TimeoutSec $script:_ConnectionTimeout
+			$restResult = Invoke-RestMethod -Uri $uri -Body $Data -Credential $script:_connectCredentials -Method Get -ContentType "application/json" -TimeoutSec $script:_ConnectionTimeout
 		}
 		else
 		{
-			$_rest = Invoke-RestMethod -Uri $_uri -Credential $script:_connectCredentials -Method Get -ContentType "application/json" -TimeoutSec $script:_ConnectionTimeout
+			$restResult = Invoke-RestMethod -Uri $uri -Credential $script:_connectCredentials -Method Get -ContentType "application/json" -TimeoutSec $script:_ConnectionTimeout
 		}
 		
-		If ($_rest)
+		if ($restResult)
 		{
-			return $_rest
+			return $restResult
 		}
 		else
 		{
@@ -78,25 +87,23 @@ Function Invoke-bConnectGet
 	
 	catch
 	{
-		Try
+		try
 		{
-			$_response = ConvertFrom-Json $_
+			$response = ConvertFrom-Json $_
 		}
 		
-		Catch
+		catch
 		{
-			$_response = $false
+			$response = $false
 		}
 		
-		If ($_response)
+		if ($response)
 		{
-			Throw $_response.Message
+			throw $response.Message
 		}
 		else
 		{
-			Throw $_
+			throw $_
 		}
-		
-		return $false
 	}
 }

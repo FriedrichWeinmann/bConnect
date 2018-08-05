@@ -1,30 +1,36 @@
-Function Remove-bConnectJobInstance() {
-    <#
-        .Synopsis
-            Remove specified jobinstance.
-        .Parameter JobInstanceGuid
-            Valid GUID of a jobinstance.
-        .Outputs
-            Bool
-    #>
+﻿function Remove-bConnectJobInstance
+{
+<#
+	.SYNOPSIS
+		Remove specified jobinstance.
+	
+	.DESCRIPTION
+		Remove specified jobinstance.
+	
+	.PARAMETER JobInstanceGuid
+		Valid GUID of a jobinstance.
+#>
 	[CmdletBinding(SupportsShouldProcess = $true)]
-	Param (
-		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]	
-		[ValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b')]
-		[string]$JobInstanceGuid
+	param (
+		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		[string]
+		$JobInstanceGuid
 	)
 	
-	$_connectVersion = Get-bConnectVersion
-	If ($_connectVersion -ge "1.0") {
-		$_body = @{
-			Id    = $JobInstanceGuid
-		}
-		if ($pscmdlet.ShouldProcess($JobInstanceGuid, "Remove JobInstance")) {
-			return Invoke-bConnectDelete -Controller "JobInstances" -Data $_body
-		}
-
+	begin
+	{
+		Assert-bConnectConnection
 	}
-	else {
-		return $false
+	process
+	{
+		$body = @{
+			Id = $JobInstanceGuid;
+		}
+		
+		if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $JobInstanceGuid -Action 'Remove JobInstance')
+		{
+			Invoke-bConnectDelete -Controller "JobInstances" -Data $body
+		}
 	}
 }

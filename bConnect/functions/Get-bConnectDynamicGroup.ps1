@@ -1,4 +1,4 @@
-function Get-bConnectDynamicGroup
+﻿function Get-bConnectDynamicGroup
 {
 <#
 	.SYNOPSIS

@@ -1,4 +1,4 @@
-Function Get-bConnectInventoryDataWmiScan
+﻿Function Get-bConnectInventoryDataWmiScan
 {
 <#
     .SYNOPSIS

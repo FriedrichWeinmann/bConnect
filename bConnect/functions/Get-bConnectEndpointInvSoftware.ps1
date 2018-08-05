@@ -1,4 +1,4 @@
-function Get-bConnectEndpointInvSoftware
+﻿function Get-bConnectEndpointInvSoftware
 {
 <#
 	.SYNOPSIS

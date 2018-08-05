@@ -1,4 +1,4 @@
-Function New-bConnectApplicationAUTFileRule
+﻿Function New-bConnectApplicationAUTFileRule
 {
 <#
 	.Synopsis

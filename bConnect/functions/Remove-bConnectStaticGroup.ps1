@@ -1,30 +1,36 @@
-Function Remove-bConnectStaticGroup() {
-    <#
-        .Synopsis
-            Remove specified StaticGroup.
-        .Parameter StaticGroupGuid
-            Valid GUID of a StaticGroup.
-        .Outputs
-            Bool
-    #>
+﻿function Remove-bConnectStaticGroup
+{
+<#
+	.SYNOPSIS
+		Remove specified StaticGroup.
+	
+	.DESCRIPTION
+		Remove specified StaticGroup.
+	
+	.PARAMETER StaticGroupGuid
+		Valid GUID of a StaticGroup.
+#>
 	[CmdletBinding(SupportsShouldProcess = $true)]
-	Param (
-		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]	
-		[ValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b')]
-		[string]$StaticGroupGuid
+	param (
+		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		[string]
+		$StaticGroupGuid
 	)
 	
-	$_connectVersion = Get-bConnectVersion
-	If ($_connectVersion -ge "1.0") {
-		$_body = @{
-			Id    = $StaticGroupGuid
+	begin
+	{
+		Assert-bConnectConnection
+	}
+	process
+	{
+		$body = @{
+			Id = $StaticGroupGuid;
 		}
 		
-		if ($pscmdlet.ShouldProcess($StaticGroupGuid, "Remove StaticGroup")) {
-			return Invoke-bConnectDelete -Controller "StaticGroups" -Data $_body
+		if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $StaticGroupGuid -Action 'Remove StaticGroup')
+		{
+			Invoke-bConnectDelete -Controller "StaticGroups" -Data $body
 		}
-	}
-	else {
-		return $false
 	}
 }

@@ -1,71 +1,99 @@
-Function Invoke-bConnectDelete() {
-    <#
-        .Synopsis
-            INTERNAL - HTTP-DELETE against bConnect
-        .Parameter Data
-            Hashtable with parameters
-        .Parameter Version
-            bConnect version to use
-    #>
+﻿function Invoke-bConnectDelete
+{
+<#
+	.SYNOPSIS
+		HTTP-DELETE against bConnect
 	
-	Param (
+	.DESCRIPTION
+		HTTP-DELETE against bConnect
+	
+	.PARAMETER Controller
+		A description of the Controller parameter.
+	
+	.PARAMETER Data
+		Hashtable with parameters
+	
+	.PARAMETER Version
+		bConnect version to use
+#>
+	[CmdletBinding()]
+	param (
 		[Parameter(Mandatory = $true)]
-		[string]$Controller,
+		[string]
+		$Controller,
+		
 		[Parameter(Mandatory = $true)]
-		[PSCustomObject]$Data,
-		[string]$Version
+		[PSCustomObject]
+		$Data,
+		
+		[string]
+		$Version
 	)
 	
-	If (!$script:_connectInitialized) {
+	if (!$script:_connectInitialized)
+	{
 		Write-Error "bConnect module is not initialized. Use 'Initialize-bConnect' first!"
 		return $false
 	}
 	
-	If ([string]::IsNullOrEmpty($Version)) {
+	if ([string]::IsNullOrEmpty($Version))
+	{
 		$Version = $script:_bConnectFallbackVersion
 	}
 	
-	If ($verbose) {
+	if ($verbose)
+	{
 		$ProgressPreference = "Continue"
 	}
-	else {
+	else
+	{
 		$ProgressPreference = "SilentlyContinue"
 	}
 	
-	try {
+	try
+	{
 		$_params = @()
-		Foreach ($_key in $Data.Keys) {
+		foreach ($_key in $Data.Keys)
+		{
 			$_params += "$($_key)=$($Data.Get_Item($_key))"
 		}
 		
 		$_rest = Invoke-RestMethod -Uri "$($script:_connectUri)/$($Version)/$($Controller)?$($_params)" -Credential $script:_connectCredentials -Method Delete -ContentType "application/json"
-		If ($_rest) {
+		if ($_rest)
+		{
 			return $_rest
 		}
-		else {
+		else
+		{
 			return $true
 		}
 	}
 	
-	catch {
+	catch
+	{
 		$_errMsg = ""
 		
-		Try {
+		try
+		{
 			$_response = ConvertFrom-Json $_
 		}
 		
-		Catch {
+		catch
+		{
 			$_response = $false
 		}
 		
-		If ($_response) {
+		if ($_response)
+		{
 			$_errMsg = $_response.Message
 		}
-		else {
+		else
+		{
 			$_errMsg = $_
 		}
 		
-		If ($_body) {
+		if ($_body)
+		{
 			$_errMsg = "$($_errMsg) `nHashtable: $($Data)"
 		}
 		

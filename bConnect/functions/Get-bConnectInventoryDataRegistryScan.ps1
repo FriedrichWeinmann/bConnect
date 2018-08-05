@@ -1,4 +1,4 @@
-Function Get-bConnectInventoryDataRegistryScan
+﻿Function Get-bConnectInventoryDataRegistryScan
 {
 <#
     .SYNOPSIS

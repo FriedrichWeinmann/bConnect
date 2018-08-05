@@ -1,33 +1,34 @@
-Function Search-bConnectOrgUnit() {
-    <#
-        .Synopsis
-            Search for specified OrgUnit.
-        .Parameter Term
-            Searchterm for the search. Wildcards allowed.
-        .Outputs
-            Array of SearchResult (see bConnect documentation for more details)
-    #>
+﻿function Search-bConnectOrgUnit
+{
+<#
+	.SYNOPSIS
+		Search for specified OrgUnit.
 	
-	Param (
+	.DESCRIPTION
+		Search for specified OrgUnit.
+	
+	.PARAMETER Term
+		Searchterm for the search. Wildcards allowed.
+#>
+	[CmdletBinding()]
+	param (
 		[Parameter(Mandatory = $true)]
-		[string]$Term
+		[string]
+		$Term
 	)
 	
-	begin {
-		$Test = Test-bConnect
-		if ($Test -ne $true) {
-			$ErrorObject = New-Object System.Net.WebSockets.WebSocketException "$Test"
-			throw $ErrorObject
-		}
+	begin
+	{
+		Assert-bConnectConnection
 	}
 	
-	process {
-		$_body = @{
-			Type = "orgunit";
+	process
+	{
+		$body = @{
+			Type = "orgunit"
 			Term = $Term
 		}
 		
-		$Result = Invoke-bConnectGet -Controller "Search" -Data $_body | Where-Object { [string]::IsNullOrEmpty($_.ID) -eq $false } | Select-Object  @{ Name = "OrgUnit"; Expression = { $_.ID } }, ID, Name, AdditionalInfo, @{ Name = "Type"; Expression = { [bConnectSearchResultType]$_.Type } }
-		$Result
+		Invoke-bConnectGet -Controller "Search" -Data $body | Where-Object ID -NE $null | Select-PSFObject  'ID as OrgUnit', ID, Name, AdditionalInfo, 'Type to bConnectSearchResultType'
 	}
 }

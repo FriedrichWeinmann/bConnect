@@ -1,30 +1,36 @@
-Function Remove-bConnectInventoryDataFileScan() {
-    <#
-        .Synopsis
-            Remove all file scans from specified endpoint.
-        .Parameter EndpointGuid
-            Valid GUID of a endpoint.
-        .Outputs
-            Bool
-    #>
+﻿function Remove-bConnectInventoryDataFileScan
+{
+<#
+	.SYNOPSIS
+		Remove all file scans from specified endpoint.
+	
+	.DESCRIPTION
+		Remove all file scans from specified endpoint.
+	
+	.PARAMETER EndpointGuid
+		Valid GUID of a endpoint.
+#>
 	[CmdletBinding(SupportsShouldProcess = $true)]
-	Param (
-		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]	
-		[ValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b')]
-		[string]$EndpointGuid
+	param (
+		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
+		[string]
+		$EndpointGuid
 	)
 	
-	$_connectVersion = Get-bConnectVersion
-	If ($_connectVersion -ge "1.0") {
-		$_body = @{
-			EndpointId    = $EndpointGuid;
+	begin
+	{
+		Assert-bConnectConnection
+	}
+	process
+	{
+		$body = @{
+			EndpointId = $EndpointGuid;
 		}
 		
-		if ($pscmdlet.ShouldProcess($EndpointGuid, "Remove InventoryDataFileScan")) {
-			return Invoke-bConnectDelete -Controller "InventoryDataFileScans" -Data $_body
+		if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $EndpointGuid -Action 'Remove InventoryDataFileScan')
+		{
+			Invoke-bConnectDelete -Controller "InventoryDataFileScans" -Data $body
 		}
-	}
-	else {
-		return $false
 	}
 }

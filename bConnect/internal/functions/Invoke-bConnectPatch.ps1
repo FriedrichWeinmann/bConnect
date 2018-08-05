@@ -1,86 +1,119 @@
-# internal - PATCH data to bConnect
-Function Invoke-bConnectPatch() {
-    <#
-        .Synopsis
-            INTERNAL - HTTP-PATCH against bConnect
-        .Parameter Data
-            Hashtable with parameters
-        .Parameter Version
-            bConnect version to use
-    #>
+﻿function Invoke-bConnectPatch
+{
+<#
+	.SYNOPSIS
+		HTTP-PATCH against bConnect
 	
-	Param (
+	.DESCRIPTION
+		HTTP-PATCH against bConnect
+	
+	.PARAMETER Controller
+		A description of the Controller parameter.
+	
+	.PARAMETER Data
+		Hashtable with parameters
+	
+	.PARAMETER objectGuid
+		A description of the objectGuid parameter.
+	
+	.PARAMETER Version
+		bConnect version to use
+#>
+	[CmdletBinding()]
+	param (
 		[Parameter(Mandatory = $true)]
-		[string]$Controller,
+		[string]
+		$Controller,
+		
 		[Parameter(Mandatory = $true)]
-		[PSCustomObject]$Data,
-		[string]$objectGuid,
-		[string]$Version
+		[PSCustomObject]
+		$Data,
+		
+		[string]
+		$objectGuid,
+		
+		[string]
+		$Version
 	)
 	
-	If (!$script:_connectInitialized) {
+	if (!$script:_connectInitialized)
+	{
 		Write-Error "bConnect module is not initialized. Use 'Initialize-bConnect' first!"
 		return $false
 	}
 	
-	If ([string]::IsNullOrEmpty($Version)) {
+	if (-not $Version)
+	{
 		$Version = $script:_bConnectFallbackVersion
 	}
 	
-	If ($verbose) {
+	if ($verbose)
+	{
 		$ProgressPreference = "Continue"
 	}
-	else {
+	else
+	{
 		$ProgressPreference = "SilentlyContinue"
 	}
 	
-	try {
-		If ($Data.Count -gt 0) {
-			$_body = ConvertTo-Json $Data
+	try
+	{
+		if ($Data.Count -gt 0)
+		{
+			$body = ConvertTo-Json $Data
 			
-			If (![string]::IsNullOrEmpty($objectGuid)) {
-				$_rest = Invoke-RestMethod -Uri "$($script:_connectUri)/$($Version)/$($Controller)?id=$($objectGuid)" -Body $_body -Credential $script:_connectCredentials -Method Patch -ContentType "application/json"
+			if (![string]::IsNullOrEmpty($objectGuid))
+			{
+				$result = Invoke-RestMethod -Uri "$($script:_connectUri)/$($Version)/$($Controller)?id=$($objectGuid)" -Body $body -Credential $script:_connectCredentials -Method Patch -ContentType "application/json"
 			}
-			else {
-				$_rest = Invoke-RestMethod -Uri "$($script:_connectUri)/$($Version)/$($Controller)" -Body $_body -Credential $script:_connectCredentials -Method Patch -ContentType "application/json"
+			else
+			{
+				$result = Invoke-RestMethod -Uri "$($script:_connectUri)/$($Version)/$($Controller)" -Body $body -Credential $script:_connectCredentials -Method Patch -ContentType "application/json"
 			}
 			
-			If ($_rest) {
-				return $_rest
+			if ($result)
+			{
+				return $result
 			}
-			else {
+			else
+			{
 				return $true
 			}
 		}
-		else {
+		else
+		{
 			return $false
 		}
 	}
 	
-	catch {
-		$_errMsg = ""
+	catch
+	{
+		$errorMessage = ""
 		
-		Try {
-			$_response = ConvertFrom-Json $_
+		try
+		{
+			$response = ConvertFrom-Json $_
 		}
 		
-		Catch {
-			$_response = $false
+		catch
+		{
+			$response = $false
 		}
 		
-		If ($_response) {
-			$_errMsg = $_response.Message
+		if ($response)
+		{
+			$errorMessage = $response.Message
 		}
-		else {
-			$_errMsg = $_
-		}
-		
-		If ($_body) {
-			$_errMsg = "$($_errMsg) `nHashtable: $($_body)"
+		else
+		{
+			$errorMessage = $_
 		}
 		
-		Throw $_errMsg
+		if ($body)
+		{
+			$errorMessage = "$($errorMessage) `nHashtable: $($body)"
+		}
 		
-		return $false
+		throw $errorMessage
 	}
 }

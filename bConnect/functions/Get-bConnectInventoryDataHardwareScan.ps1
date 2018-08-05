@@ -1,4 +1,4 @@
-function Get-bConnectInventoryDataHardwareScan
+﻿function Get-bConnectInventoryDataHardwareScan
 {
 <#
 	.SYNOPSIS

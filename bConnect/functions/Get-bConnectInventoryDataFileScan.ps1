@@ -1,4 +1,4 @@
-Function Get-bConnectInventoryDataFileScan
+﻿Function Get-bConnectInventoryDataFileScan
 {
 <#
     .SYNOPSIS

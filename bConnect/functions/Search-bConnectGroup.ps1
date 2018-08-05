@@ -1,40 +1,34 @@
+﻿function Search-bConnectGroup
+{
 <#
-	.Synopsis
+	.SYNOPSIS
 		Search for specified group.
 	
 	.DESCRIPTION
-		A detailed description of the Search-bConnectGroup function.
+		Search for specified group.
 	
-	.Parameter Term
+	.PARAMETER Term
 		Searchterm for the search. Wildcards allowed.
-	
-	.Outputs
-		Array of SearchResult (see bConnect documentation for more details)
-	
-	.NOTES
-		Additional information about the function.
 #>
-function Search-bConnectGroup {
+	[CmdletBinding()]
 	param
 	(
 		[Parameter(Mandatory = $true)]
-		[string]$Term
+		[string]
+		$Term
 	)
 	
-	begin {
-		$Test = Test-bConnect
-		if ($Test -ne $true) {
-			$ErrorObject = New-Object System.Net.WebSockets.WebSocketException "$Test"
-			throw $ErrorObject
-		}
+	begin
+	{
+		Assert-bConnectConnection
 	}
 	
-	process {
-		$_body = @{
-			Type = "group";
+	process
+	{
+		$body = @{
+			Type = "group"
 			Term = $Term
-		}	
-		$Result = Invoke-bConnectGet -Controller "Search" -Data $_body | Where-Object { [string]::IsNullOrEmpty($_.ID) -eq $false } | Select-Object  @{ Name = "OrgUnit"; Expression = { $_.ID } }, ID, Name, AdditionalInfo, @{ Name = "Type"; Expression = { [bConnectSearchResultType]$_.Type } }
-		$Result
+		}
+		Invoke-bConnectGet -Controller "Search" -Data $body | Where-Object ID -ne $null | Select-PSFObject 'ID as OrgUnit', ID, Name, AdditionalInfo, 'Type to bConnectSearchResultType'
 	}
 }

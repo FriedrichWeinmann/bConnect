@@ -1,5 +1,7 @@
+﻿function Search-bConnectEndpoint
+{
 <#
-	.Synopsis
+	.SYNOPSIS
 		Search for specified endpoints in BMS.
 	
 	.DESCRIPTION
@@ -21,37 +23,36 @@
 	
 	.EXAMPLE
 		PS C:\> Search-bConnectEndpoint -Term 'PC1'
+		
 		Searches for a Client with the Name PC1
 	
 	.EXAMPLE
 		PS C:\> Search-bConnectEndpoint -Type WindowsEndpoint -OnlyActiveClients
+		
 		Searches for all active Windows Clients
 
 	.EXAMPLE
 		PS C:\> Search-bConnectEndpoint -Filter '$_.Hostname -like "MyPC"'
+		
 		Searches for a Client with the Hostname MyPC
 
 	.EXAMPLE
 		PS C:\> Search-bConnectEndpoint -Filter {$_.Hostname -like "Server*"}
+		
 		Searches for Clients starting with Hostname Server
 
 	.EXAMPLE
 		PS C:\> Search-bConnectEndpoint -Filter '$_.OperatingSystem -like "Windows Server*"' | New-bConnectStaticGroup -Name "Windows Server Clients" -Comment "A Group Full of Windows Server Clients"
+		
 		Searches for Clients with Windows Server Operating System and Adds them to a new StaticGroup
 
 	.EXAMPLE
 		PS C:\> $Name = "Server*"
 		PS C:\> Search-bConnectEndpoint -Filter '$_.Hostname -like $Name'
+		
 		You can do the same when the value is passed as a variable
-	
-	.Outputs
-		Array of SearchResult (see bConnect documentation for more details)
-	
-	.NOTES
-		Additional information about the function.
 #>
-function Search-bConnectEndpoint
-{
+	[CmdletBinding()]
 	param
 	(
 		[Parameter(ParameterSetName = 'Search', Mandatory = $true, Position = 1)]
@@ -74,17 +75,14 @@ function Search-bConnectEndpoint
 	begin
 	{
 		Assert-bConnectConnection
-	}
-	process
-	{
 		
 		$WhereArray = @()
-		$WhereArray += '[string]::IsNullOrEmpty($_.ID) -eq $false'
+		$WhereArray += '$_.ID'
 		if ($Type)
 		{
 			$WhereArray += '$_.Type -eq $Type'
 		}
-		if ($OnlyActiveClients -and $PSCmdlet.ParameterSetName -eq "Search")
+		if ($OnlyActiveClients)
 		{
 			$WhereArray += '$_.Deactivated -eq $false'
 		}
@@ -99,34 +97,32 @@ function Search-bConnectEndpoint
 		}
 		catch
 		{
-			$ErrorObject = New-Object System.Exception "Error with the Filter $($Filter.ToString()) . Please Check Syntax. $_"
-			throw $ErrorObject
+			Stop-PSFFunction -Message "Error with the filter, please check Syntax. $($Filter.ToString())" -ErrorRecord $_ -EnableException $true
 		}
-		
-		
+	}
+	process
+	{
 		switch ($PSCmdlet.ParameterSetName)
 		{
 			"Search" {
-				$_body = @{
-					Type = "endpoint";
+				$body = @{
+					Type = "endpoint"
 					Term = $Term
 				}
 				
-				$Result = Invoke-bConnectGet -Controller "Search" -Data $_body | Where-Object -FilterScript $WhereBlock | Select-PSFObject "ID as EndpointGuid", ID, Name, AdditionalInfo, "Type to bConnectSearchResultType", Deactivated
+				Invoke-bConnectGet -Controller "Search" -Data $body | Where-Object -FilterScript $WhereBlock | Select-PSFObject "ID as EndpointGuid", ID, Name, AdditionalInfo, "Type to bConnectSearchResultType", Deactivated
 			}
 			"Filter" {
 				try
 				{
-					$Result = Get-bConnectEndpoint | Where-Object -FilterScript $WhereBlock -ErrorAction Stop | Select-PSFObject  EndpointGuid, ID, "DisplayName as Name", "Comments as AdditionalInfo", "Type to bConnectSearchResultType", Deactivated
+					Get-bConnectEndpoint | Where-Object -FilterScript $WhereBlock -ErrorAction Stop | Select-PSFObject  EndpointGuid, ID, "DisplayName as Name", "Comments as AdditionalInfo", "Type to bConnectSearchResultType", Deactivated
 				}
 				catch
 				{
-					$ErrorObject = New-Object System.Exception "Error with the Filter $($Filter.ToString()) . Please Check Syntax. $_"
-					throw $ErrorObject
+					Stop-PSFFunction -Message "Failed to retrieve endpoint." -ErrorRecord $_ -EnableException $true
 				}
 				
 			}
 		}
-		$Result
 	}
 }

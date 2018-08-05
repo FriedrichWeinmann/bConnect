@@ -1,4 +1,4 @@
-Function New-bConnectApplicationInstallationData
+﻿Function New-bConnectApplicationInstallationData
 {
 <#
 	.SYNOPSIS

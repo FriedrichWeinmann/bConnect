@@ -1,33 +1,36 @@
-Function Search-bConnectDynamicGroup() {
-    <#
-        .Synopsis
-            Search for specified static group.
-        .Parameter Term
-            Searchterm for the search. Wildcards allowed.
-        .Outputs
-            Array of SearchResult (see bConnect documentation for more details)
-    #>
+﻿function Search-bConnectDynamicGroup
+{
+<#
+	.SYNOPSIS
+		Search for specified static group.
 	
-	Param (
+	.DESCRIPTION
+		Search for specified static group.
+	
+	.PARAMETER Term
+		Searchterm for the search. Wildcards allowed.
+#>
+	[CmdletBinding()]
+	param (
 		[Parameter(Mandatory = $true)]
-		[string]$Term
+		[string]
+		$Term
 	)
 	
-	begin {
-		$Test = Test-bConnect
-		if ($Test -ne $true) {
-			$ErrorObject = New-Object System.Net.WebSockets.WebSocketException "$Test"
-			throw $ErrorObject
-		}
+	begin
+	{
+		Assert-bConnectConnection
 	}
 	
-	process {
-		$_body = @{
+	process
+	{
+		$body = @{
 			Type = "group";
 			Term = $Term
 		}
 		
-		$Result = Invoke-bConnectGet -Controller "Search" -Data $_body | Where-Object { $_.Type -eq [bConnectSearchResultType]::DynamicGroup } | Select-Object  @{ Name = "DynamicGroupGuid"; Expression = { $_.ID } }, ID, Name, AdditionalInfo, @{ Name = "Type"; Expression = { [bConnectSearchResultType]$_.Type } }
-		$Result
+		Invoke-bConnectGet -Controller "Search" -Data $body |
+		Where-Object Type -eq ([bConnectSearchResultType]::DynamicGroup) |
+		Select-PSFObject  'ID as DynamicGroupGuid', ID, Name, AdditionalInfo, 'Type to bConnectSearchResultType'
 	}
 }

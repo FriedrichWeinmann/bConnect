@@ -1,0 +1,28 @@
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>CommandBody</Title>
+			<Shortcut></Shortcut>
+			<Author>Infernal Associates</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="PowerShell">
+				<![CDATA[begin
+{
+	Assert-bConnectConnection
+}
+process
+{
+	$body = @{
+		Id  = $REPLACEME
+	}
+	
+	Invoke-bConnectGet -Controller "REPLACEME" -Data $body
+}]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

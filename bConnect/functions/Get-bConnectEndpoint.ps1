@@ -1,4 +1,4 @@
-function Get-bConnectEndpoint
+﻿function Get-bConnectEndpoint
 {
 <#
 	.Synopsis

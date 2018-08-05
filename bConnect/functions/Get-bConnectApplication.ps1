@@ -1,4 +1,4 @@
-Function Get-bConnectApplication
+﻿Function Get-bConnectApplication
 {
 <#
 	.SYNOPSIS
@@ -21,15 +21,15 @@ Function Get-bConnectApplication
 #>
 	
 	Param (
-		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Faild to parse input as guid: {0}')]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
 		[string]
 		$ApplicationGuid,
 		
-		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Faild to parse input as guid: {0}')]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
 		[string]
 		$OrgUnitGuid,
 		
-		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Faild to parse input as guid: {0}')]
+		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
 		[string]
 		$EndpointGuid
 	)

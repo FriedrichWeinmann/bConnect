@@ -1,4 +1,4 @@
-function Edit-bConnectApplication
+﻿function Edit-bConnectApplication
 {
 <#
 	.SYNOPSIS

@@ -1,4 +1,4 @@
-Function Test-Guid
+﻿Function Test-Guid
 {
 <#
     .SYNOPSIS

@@ -1,4 +1,4 @@
-Function Get-bConnectInventoryDataCustomScan
+﻿Function Get-bConnectInventoryDataCustomScan
 {
 <#
     .SYNOPSIS
