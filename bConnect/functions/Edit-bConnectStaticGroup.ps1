@@ -34,11 +34,11 @@ function Edit-bConnectStaticGroup
 			# So we need to create a new one with editable fields only...
 			# And as this might be too easy we face another problem: we are only allowed to send the changed fields :(
 			# Dirty workaround: reload the object and compare new vs. old
-			$_old_group = Get-bConnectStaticGroup -StaticGroup $StaticGroup.Id
-			$_old_group = ConvertTo-Hashtable $_old_group
+			$oldGroup = Get-bConnectStaticGroup -StaticGroup $StaticGroup.Id
+			$oldGroup = ConvertTo-Hashtable $oldGroup
 			
-			$_new_group = @{ Id = $StaticGroup.Id }
-			$_propertyList = @(
+			$newGroup = @{ Id = $StaticGroup.Id }
+			$propertyList = @(
 				"ParentId",
 				"Name",
 				"EndpointIds",
@@ -46,38 +46,29 @@ function Edit-bConnectStaticGroup
 			)
 			$StaticGroup = ConvertTo-Hashtable $StaticGroup
 			
-			$_endpointIds = @()
-			Foreach ($_ep in $StaticGroup.EndpointIds)
+			$endpointIds = @()
+			Foreach ($endpointID in $StaticGroup.EndpointIds)
 			{
-				$_endpointIds += $_ep.Id
+				$endpointIds += $endpointID.Id
 			}
-			$StaticGroup.EndpointIds = $_endpointIds
+			$StaticGroup.EndpointIds = $endpointIds
 			
-			Foreach ($_property in $_propertyList)
+			Foreach ($property in $propertyList)
 			{
-				If ($StaticGroup[$_property] -ine $_old_group[$_property])
+				If ($StaticGroup[$property] -ine $oldGroup[$property])
 				{
-					$_new_group += @{ $_property = $StaticGroup[$_property] }
+					$newGroup += @{ $property = $StaticGroup[$property] }
 				}
 			}
 			
-			if ($pscmdlet.ShouldProcess($StaticGroup.Id, "Edit Static Group"))
+			if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $StaticGroup.Id -Action 'Edit Static Group')
 			{
-				Invoke-bConnectPatch -Controller "StaticGroups" -objectGuid $StaticGroup.Id -Data $_new_group | ForEach-Object {
-					if ($_.PSObject.Properties.Name -contains 'ID')
-					{
-						Add-ObjectDetail -InputObject $_ -TypeName 'bConnect.StaticGroup'
-					}
-					else
-					{
-						$_
-					}
-				}
+				Invoke-bConnectPatch -Controller "StaticGroups" -objectGuid $StaticGroup.Id -Data $newGroup | Add-ObjectDetail -TypeName 'bConnect.StaticGroup' -WithID
 			}
 			else
 			{
-				Write-Verbose -Message "Edit Static Group"
-				foreach ($k in $_new_group.Keys) { Write-Verbose -Message "$k : $($_new_group[$k])" }
+				Write-PSFMessage -Level Verbose -Message "Edit Static Group"
+				foreach ($k in $newGroup.Keys) { Write-PSFMessage -Level SomewhatVerbose -Message "$k : $($newGroup[$k])" }
 			}
 		}
 		

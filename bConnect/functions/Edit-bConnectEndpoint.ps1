@@ -89,24 +89,16 @@
 					}
 				}
 				
-				if ($pscmdlet.ShouldProcess($endpointItem.Id, "Edit Endpoint"))
+				if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $endpointItem.Id -Action 'Edit Endpoint')
 				{
-					$Result = Invoke-bConnectPatch -Controller "Endpoints" -objectGuid $endpointItem.Id -Data $newEndpoint | Select-Object  @{ Name = "EndpointGuid"; Expression = { $_.ID } }, *
-					$Result | ForEach-Object {
-						if ($_.PSObject.Properties.Name -contains 'ID')
-						{
-							Add-ObjectDetail -InputObject $_ -TypeName 'bConnect.Endpoint'
-						}
-						else
-						{
-							$_
-						}
-					}
+					Invoke-bConnectPatch -Controller "Endpoints" -objectGuid $endpointItem.Id -Data $newEndpoint |
+					Select-PSFObject 'ID as EndpointGuid', * |
+					Add-ObjectDetail -TypeName 'bConnect.Endpoint' -WithID
 				}
 				else
 				{
-					Write-Verbose -Message "Edit Endpoint"
-					foreach ($k in $newEndpoint.Keys) { Write-Verbose -Message "$k : $($newEndpoint[$k])" }
+					Write-PSFMessage -Level Verbose -Message "Edit Endpoint"
+					foreach ($k in $newEndpoint.Keys) { Write-PSFMessage -Level SomewhatVerbose -Message "$k : $($newEndpoint[$k])" }
 				}
 			}
 		}

@@ -38,15 +38,6 @@
 		if ($Scope) { $body['Scope'] = $Scope }
 		if ($AppGuid) { $body['AppId'] = $AppGuid }
 		
-		Invoke-bConnectGet -Controller "Icons" -Data $body | ForEach-Object {
-			if ($_.PSObject.Properties.Name -contains 'AppId')
-			{
-				Add-ObjectDetail -InputObject $_ -TypeName 'bConnect.AppIcon'
-			}
-			else
-			{
-				$_
-			}
-		}
+		Invoke-bConnectGet -Controller "Icons" -Data $body | Add-ObjectDetail -TypeName 'bConnect.AppIcon' -WithID
 	}
 }

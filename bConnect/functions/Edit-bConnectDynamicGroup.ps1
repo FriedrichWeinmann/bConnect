@@ -36,11 +36,11 @@
 			# So we need to create a new one with editable fields only...
 			# And as this might be too easy we face another problem: we are only allowed to send the changed fields :(
 			# Dirty workaround: reload the object and compare new vs. old
-			$_old_group = Get-bConnectDynamicGroup -DynamicGroup $DynamicGroup.Id
-			$_old_group = ConvertTo-Hashtable $_old_group
+			$oldGroup = Get-bConnectDynamicGroup -DynamicGroup $DynamicGroup.Id
+			$oldGroup = ConvertTo-Hashtable $oldGroup
 			
-			$_new_group = @{ Id = $DynamicGroup.Id }
-			$_propertyList = @(
+			$newGroup = @{ Id = $DynamicGroup.Id }
+			$propertyList = @(
 				"ParentId",
 				"Name",
 				"Statement",
@@ -48,39 +48,30 @@
 			)
 			$DynamicGroup = ConvertTo-Hashtable $DynamicGroup
 			
-			Foreach ($_property in $_propertyList)
+			Foreach ($property in $propertyList)
 			{
-				If ($DynamicGroup[$_property] -ine $_old_group[$_property])
+				If ($DynamicGroup[$property] -ine $oldGroup[$property])
 				{
-					$_new_group += @{ $_property = $DynamicGroup[$_property] }
+					$newGroup += @{ $property = $DynamicGroup[$property] }
 				}
 			}
 			
 			#Workaround for a bug in bConnect 2016r1
 			# we need to assign the property "Name" even if it is unchanged.
 			# otherwise the controller returns an error...
-			If ($_new_group.Keys -notcontains "Name")
+			If ($newGroup.Keys -notcontains "Name")
 			{
-				$_new_group += @{ "Name" = $DynamicGroup["Name"] }
+				$newGroup += @{ "Name" = $DynamicGroup["Name"] }
 			}
 			
-			if ($pscmdlet.ShouldProcess($DynamicGroup.Id, "Edit Dynamic Group"))
+			if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $DynamicGroup.Id -Action 'Edit Dynamic Group')
 			{
-				Invoke-bConnectPatch -Controller "DynamicGroups" -objectGuid $DynamicGroup.Id -Data $_new_group | ForEach-Object {
-					if ($_.PSObject.Properties.Name -contains 'ID')
-					{
-						Add-ObjectDetail -InputObject $_ -TypeName 'bConnect.DynamicGroup'
-					}
-					else
-					{
-						$_
-					}
-				}
+				Invoke-bConnectPatch -Controller "DynamicGroups" -objectGuid $DynamicGroup.Id -Data $newGroup | Add-ObjectDetail -TypeName 'bConnect.DynamicGroup' -WithID
 			}
 			else
 			{
-				Write-Verbose -Message "Edit Dynamic Group"
-				foreach ($k in $_new_group.Keys) { Write-Verbose -Message "$k : $($_new_group[$k])" }
+				Write-PSFMessage -Level Verbose -Message "Edit Dynamic Group"
+				foreach ($k in $newGroup.Keys) { Write-PSFMessage -Level SomewhatVerbose -Message "$k : $($newGroup[$k])" }
 			}
 		}
 		

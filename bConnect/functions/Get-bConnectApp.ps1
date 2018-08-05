@@ -45,15 +45,6 @@
 		if ($OrgUnitGuid) { $body['OrgUnit'] = $OrgUnitGuid }
 		if ($AppGuid) { $body['Id'] = $AppGuid }
 		
-		Invoke-bConnectGet -Controller "Apps" -Data $body | Select-PSFObject  "ID as AppGuid", * | ForEach-Object {
-			if ($_.PSObject.Properties.Name -contains 'Id')
-			{
-				Add-ObjectDetail -InputObject $_ -TypeName 'bConnect.App'
-			}
-			else
-			{
-				$_
-			}
-		}
+		Invoke-bConnectGet -Controller "Apps" -Data $body | Select-PSFObject  "ID as AppGuid", * | Add-ObjectDetail -TypeName 'bConnect.App' -WithID
 	}
 }

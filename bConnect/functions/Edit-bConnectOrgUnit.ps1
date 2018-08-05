@@ -13,7 +13,6 @@
 	.OUTPUTS
 		OrgUnit
 #>
-	
 	[CmdletBinding(ConfirmImpact = 'Medium', SupportsShouldProcess = $true)]
 	Param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
@@ -30,25 +29,18 @@
 	{
 		If (Test-Guid $OrgUnit.Id)
 		{
+			$orgUnitItem = ConvertTo-Hashtable $OrgUnit
 			
-			$_orgUnit = ConvertTo-Hashtable $OrgUnit
-			if ($pscmdlet.ShouldProcess($_orgUnit.Id, "Edit OrgUnit"))
+			if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $orgUnitItem.Id -Action 'Edit OrgUnit')
 			{
-				Invoke-bConnectPatch -Controller "OrgUnits" -objectGuid $OrgUnit.Id -Data $_orgUnit | Select-PSFObject  "ID as OrgUnitGuid", * | ForEach-Object {
-					if ($_.PSObject.Properties.Name -contains 'OrgUnitGuid')
-					{
-						Add-ObjectDetail -InputObject $_ -TypeName 'bConnect.OrgUnit'
-					}
-					else
-					{
-						$_
-					}
-				}
+				Invoke-bConnectPatch -Controller "OrgUnits" -objectGuid $OrgUnit.Id -Data $orgUnitItem |
+				Select-PSFObject  "ID as OrgUnitGuid", * |
+				Add-ObjectDetail -TypeName 'bConnect.OrgUnit' -WithID
 			}
 			else
 			{
-				Write-Verbose -Message "Edit OrgUnit"
-				foreach ($k in $_orgUnit.Keys) { Write-Verbose -Message "$k : $($_orgUnit[$k])" }
+				Write-PSFMessage -Level Verbose -Message "Edit OrgUnit"
+				foreach ($k in $orgUnitItem.Keys) { Write-PSFMessage -Level SomewhatVerbose -Message "$k : $($orgUnitItem[$k])" }
 			}
 		}
 	}

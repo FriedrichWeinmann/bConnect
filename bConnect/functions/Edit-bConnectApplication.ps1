@@ -23,12 +23,12 @@
 		$Application
 	)
 	
-	BEGIN
+	begin
 	{
 		Assert-bConnectConnection
 	}
 	
-	PROCESS
+	process
 	{
 		If (Test-Guid $Application.ApplicationGuid)
 		{
@@ -37,25 +37,18 @@
 				$Application.EnableAUT = $true
 			}
 			
-			$_Application = ConvertTo-Hashtable $Application
-			if ($pscmdlet.ShouldProcess($_Application.Id, "Edit Application"))
+			$applicationItem = ConvertTo-Hashtable $Application
+			
+			if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $applicationItem.Id -Action 'Edit Application')
 			{
-				$Result = Invoke-bConnectPatch -Controller "Applications" -objectGuid $_Application.ApplicationGuid -Data $_Application | Select-Object  @{ Name = "ApplicationGuid"; Expression = { $_.ID } }, *
-				$Result | ForEach-Object {
-					if ($_.PSObject.Properties.Name -contains 'ApplicationGuid')
-					{
-						Add-ObjectDetail -InputObject $_ -TypeName 'bConnect.Application'
-					}
-					else
-					{
-						$_
-					}
-				}
+				Invoke-bConnectPatch -Controller "Applications" -objectGuid $applicationItem.ApplicationGuid -Data $applicationItem |
+				Select-PSFObject 'ID as ApplicationGuid', * |
+				Add-ObjectDetail -TypeName 'bConnect.Application' -WithID
 			}
 			else
 			{
-				Write-Verbose -Message "Edit Application"
-				foreach ($k in $_Application.Keys) { Write-Verbose -Message "$k : $($_Application[$k])" }
+				Write-PSFMessage -Level Verbose -Message "Edit Application"
+				foreach ($k in $applicationItem.Keys) { Write-PSFMessage -Level SomewhatVerbose -Message "$k : $($applicationItem[$k])" }
 			}
 		}
 	}
