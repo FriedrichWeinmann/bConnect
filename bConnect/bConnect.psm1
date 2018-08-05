@@ -1,6 +1,14 @@
 $script:ModuleRoot = $PSScriptRoot
 $script:ModuleVersion = "1.0.0.0"
 
+$script:_connectInitialized = $false
+
+# fallback bConnect version
+$script:_bConnectFallbackVersion = "v1.0"
+
+# overwrite Invoke-RestMethod timout
+$script:_ConnectionTimeout = 0
+
 function Import-ModuleFile
 {
 	<#

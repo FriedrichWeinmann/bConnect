@@ -1,0 +1,18 @@
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>validateguid</Title>
+			<Shortcut></Shortcut>
+			<Description>Inserts a validation attribute that validates for containing Guid</Description>
+			<Author>Infernal Associates Ltd.</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Code Language="PowerShell">
+				<![CDATA[[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

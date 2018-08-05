@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\..\..\bConnect\bin</OutputPath>
-    <DocumentationFile>..\..\..\bConnect\bin\netstandard2.0\bConnect.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\bConnect\bin\bConnect.xml</DocumentationFile>
   </PropertyGroup>
   
   <PropertyGroup>
