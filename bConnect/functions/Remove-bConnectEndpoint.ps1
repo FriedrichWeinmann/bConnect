@@ -13,6 +13,7 @@
 	.PARAMETER Endpoint
 		Valid Endpoint object
 #>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSShouldProcess", "", Justification="Test-PSFShouldProcess is used instead of ShouldProcess.")]
 	[CmdletBinding(ConfirmImpact = 'High', SupportsShouldProcess = $true, DefaultParameterSetName = 'Guid')]
 	param
 	(

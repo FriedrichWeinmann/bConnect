@@ -10,6 +10,7 @@
 	.PARAMETER DynamicGroupGuid
 		Valid GUID of a DynamicGroup.
 #>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSShouldProcess", "", Justification="Test-PSFShouldProcess is used instead of ShouldProcess.")]
 	[CmdletBinding(SupportsShouldProcess = $true)]
 	param (
 		[Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]

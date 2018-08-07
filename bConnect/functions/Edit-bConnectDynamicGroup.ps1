@@ -16,6 +16,7 @@
 	.NOTES
 		Additional information about the function.
 #>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSShouldProcess", "", Justification="Test-PSFShouldProcess is used instead of ShouldProcess.")]
 	[CmdletBinding(ConfirmImpact = 'Medium', SupportsShouldProcess = $true)]
 	param
 	(
