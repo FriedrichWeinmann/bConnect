@@ -31,15 +31,16 @@
 	{
 		try
 		{
-			[version]$connectVersion = (Invoke-bConnectGet -Controller "info" -NoVersion -ErrorAction Stop).bConnectVersion
-			if (-not ($_connectVersion -ge $MinVersion))
-			{
-				Stop-PSFFunction -Message "bConnect has not the Required Version: $MinVersion" -EnableException $true -Cmdlet $PSCmdlet
-			}
+			[version]$_connectVersion = (Invoke-bConnectGet -Controller "info" -NoVersion -ErrorAction Stop).bConnectVersion
 		}
-		catch
-		{
+		catch {
 			Stop-PSFFunction -Message "Connection could not be validated!" -EnableException $true -Cmdlet $PSCmdlet -ErrorRecord $_
+		}
+		if (-not ($_connectVersion -ge $MinVersion)) {
+			# Terminating Erorr
+			# Throw "bConnect has not the Required Version: $MinVersion"
+			# No Terminating Error
+			Stop-PSFFunction -Message "bConnect has not the Required Version: $MinVersion" -EnableException $true -Cmdlet $PSCmdlet
 		}
 	}
 }
