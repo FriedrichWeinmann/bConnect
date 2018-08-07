@@ -5,10 +5,31 @@
 		Updates a existing DynamicGroup.
 	
 	.DESCRIPTION
-		A detailed description of the Edit-bConnectDynamicGroup function.
+		With Edit-bConnectDynamicGroup you can change the following properties:
+			- Name (has to be unique in  the parent org unit)
+			- Statement (a valid SQL Query)
+			- ParentID (id of an org unit)
+			- Comment
+	
+		The Cmdlet accepts an DynamicGroup Object (easy to get via Get-bConnectDynamicGroup) or an
+		hashtable. For Identification the object must have an DynamicGroupGuid Key with a valid
+		GUID from an DynamicGroup Object.
 	
 	.PARAMETER DynamicGroup
 		Valid modified DynamicGroup
+	
+	.EXAMPLE
+		PS C:\> Edit-bConnectDynamicGroup -DynamicGroup $DynamicGroup
+	
+		Set the properties from the DynamicGroup object to an existing baramundi Dynamic Group
+	
+	.EXAMPLE
+		$MyGroup = Get-bConnectDynamicGroup -DynamicGroup <GUID> or <Name>
+		$MyGroup.Name = "NewName"
+		$MyGroup | Edit-bConnectDynamicGroup
+	
+		Get an existing baramundi Application, edit the Application Object and send the changed
+		object with Edit-bConnectEndpoint back to the REST API
 	
 	.OUTPUTS
 		DynamicGroup (see bConnect documentation for more details).
