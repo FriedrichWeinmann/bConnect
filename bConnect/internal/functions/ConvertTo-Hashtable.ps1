@@ -22,7 +22,7 @@
 		{
 			$hashtable = [ordered]@{ }
 			$objectItem | Get-Member -MemberType *Property | ForEach-Object {
-				$hashtable[$_.Name] = $_.Value
+				$hashtable[$_.Name] = $objectItem.($_.Name)
 			}
 			$hashtable
 		}
