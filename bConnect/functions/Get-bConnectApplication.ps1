@@ -51,7 +51,7 @@
 	
 	process
 	{
-		$body = { }
+		$body = @{ }
 		if ($EndpointGuid) { $body['EndpointId'] = $EndpointGuid }
 		if ($OrgUnitGuid) { $body['OrgUnit'] = $OrgUnitGuid }
 		if ($ApplicationGuid) { $body['Id'] = $ApplicationGuid }
