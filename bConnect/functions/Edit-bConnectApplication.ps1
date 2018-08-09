@@ -53,19 +53,32 @@
 			{
 				$Application.EnableAUT = $true
 			}
-			
-			$applicationItem = ConvertTo-Hashtable $Application
-			
-			if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $applicationItem.Id -Action 'Edit Application')
-			{
-				Invoke-bConnectPatch -Controller "Applications" -objectGuid $applicationItem.ApplicationGuid -Data $applicationItem |
-				Select-PSFObject 'ID as ApplicationGuid', * |
-				Add-ObjectDetail -TypeName 'bConnect.Application' -WithID
-			}
-			else
-			{
-				Write-PSFMessage -Level Verbose -Message "Edit Application"
-				foreach ($k in $applicationItem.Keys) { Write-PSFMessage -Level SomewhatVerbose -Message "$k : $($applicationItem[$k])" }
+
+			$newApplication = @{ Id = $Application.ApplicationGuid }
+
+			$flatOldApplication = Get-bConnectApplication -ApplicationGuid $Application.ApplicationGuid | ConvertTo-FlatObject
+			$flatNewApplication = $Application | ConvertTo-FlatObject
+
+			$Diff = Compare-ObjectProperty -ReferenceObject $flatOldApplication -DifferenceObject $flatNewApplication
+
+			If ($Diff.PropertyName.Count -gt 0) {
+				foreach ($_Property in $Diff) {
+					If( $_Property.PropertyName -match "\.([^\.]+)\.") {
+						$newApplication += @{$Matches[1] = $Application.($Matches[1])}
+					}
+					
+				}
+				if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $newApplication.ID -Action 'Edit Application')
+				{
+					Invoke-bConnectPatch -Controller "Applications" -objectGuid $newApplication.ID -Data $newApplication |
+					Select-PSFObject 'ID as ApplicationGuid', * |
+					Add-ObjectDetail -TypeName 'bConnect.Application' -WithID
+				}
+				else
+				{
+					Write-PSFMessage -Level Verbose -Message "Edit Application"
+					foreach ($k in $newApplication.Keys) { Write-PSFMessage -Level Host -Message "$k : $($newApplication[$k])" }
+				}
 			}
 		}
 	}
