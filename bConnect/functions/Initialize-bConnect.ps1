@@ -54,15 +54,14 @@
 	$script:_connectUri = $uri
 	$script:_connectCredentials = $Credentials
 	
-	$Test = Test-bConnect
+	$Test = Test-bConnect -ErrorAction "Stop"
 	
 	If ($Test -ne $true)
 	{
 		$script:_connectInitialized = $false
 		$script:_connectUri = ""
 		$script:_connectCredentials = ""
-		$ErrorObject = New-Object System.Net.WebSockets.WebSocketException "$Test"
-		Throw $ErrorObject
+		Stop-PSFFunction -Message "Error while initalizing the bConnect Module" -EnableException $true -Cmdlet $PSCmdlet
 	}
 	else
 	{

@@ -13,6 +13,7 @@
 	.PARAMETER Application
 		Valid Application object
 #>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSShouldProcess", "", Justification="Test-PSFShouldProcess is used instead of ShouldProcess.")]	
 	[CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'AppID')]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'AppID')]
