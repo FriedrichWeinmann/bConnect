@@ -1,6 +1,4 @@
-﻿function Get-bConnectEndpoint
-{
-<#
+﻿<#
 	.Synopsis
 		Get specified endpoint or all endpoints in given OrgUnit
 	
@@ -56,60 +54,57 @@
 	.NOTES
 		Additional information about the function.
 #>
-	[CmdletBinding()]
-	param
+Function Get-bConnectEndpoint
+{
+	[CmdletBinding(DefaultParameterSetName = 'ShowAll')]
+	Param
 	(
-		[Parameter(ValueFromPipelineByPropertyName = $true)]
+		[Parameter(ParameterSetName = 'Endpoint',
+				   Mandatory = $true,
+				   ValueFromPipelineByPropertyName = $true)]
 		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
-		[string]
-		$EndpointGuid,
-		
+		[string]$EndpointGuid,
+		[Parameter(ParameterSetName = 'OrgUnit',
+				   Mandatory = $true,
+				   ValueFromPipelineByPropertyName = $true)]
 		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
-		[Parameter(ValueFromPipelineByPropertyName = $true)]
-		[string]
-		$OrgUnitGuid,
-		
+		[string]$OrgUnitGuid,
+		[Parameter(ParameterSetName = 'DynamicGroup',
+				   Mandatory = $true,
+				   ValueFromPipelineByPropertyName = $true)]
 		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
-		[Parameter(ValueFromPipelineByPropertyName = $true)]
-		[string]
-		$DynamicGroupGuid,
-		
-		[Parameter(ValueFromPipelineByPropertyName = $true)]
+		[string]$DynamicGroupGuid,
+		[Parameter(ParameterSetName = 'StaticGroup',
+				   Mandatory = $true,
+				   ValueFromPipelineByPropertyName = $true)]
 		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
-		[string]
-		$StaticGroupGuid,
-		
-		[switch]
-		$PublicKey,
-		
-		[switch]
-		$IncludeSoftware,
-		
-		[switch]
-		$IncludeSnmpData
+		[string]$StaticGroupGuid,
+		[switch]$PublicKey,
+		[switch]$IncludeSoftware,
+		[switch]$IncludeSnmpData
 	)
 	
-	begin
+	Begin
 	{
 		Assert-bConnectConnection
 	}
-	process
+	Process
 	{
 		$body = @{ }
 		
-		if ($EndpointGuid) { $body["Id"] = $EndpointGuid }
-		elseif ($OrgUnitGuid){ $body["OrgUnit"] = $OrgUnitGuid }
-		elseif ($DynamicGroupGuid) { $body["DynamicGroup"] = $DynamicGroupGuid }
-		elseif ($StaticGroupGuid) { $body["StaticGroup"] = $StaticGroupGuid }
+		If ($EndpointGuid) { $body["Id"] = $EndpointGuid }
+		ElseIf ($OrgUnitGuid) { $body["OrgUnit"] = $OrgUnitGuid }
+		ElseIf ($DynamicGroupGuid) { $body["DynamicGroup"] = $DynamicGroupGuid }
+		ElseIf ($StaticGroupGuid) { $body["StaticGroup"] = $StaticGroupGuid }
 		
 		# Adds the Public Key to the Ouptut
-		if ($PublicKey) { $body["PubKey"] = $true }
+		If ($PublicKey) { $body["PubKey"] = $true }
 		
 		# Adds the Installed Software to the Ouptut
-		if ($IncludeSoftware) { $body["InstalledSoftware"] = $true }
+		If ($IncludeSoftware) { $body["InstalledSoftware"] = $true }
 		
 		# Adds the SNMP Data to the Ouptut
-		if ($IncludeSnmpData) { $body["SnmpData"] = $true }
+		If ($IncludeSnmpData) { $body["SnmpData"] = $true }
 		
 		Invoke-bConnectGet -Controller "Endpoints" -Data $body |
 		Select-PSFObject "ID as EndpointGuid", "*" |
