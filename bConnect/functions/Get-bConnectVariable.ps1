@@ -37,7 +37,7 @@
 		[string]
 		$Name,
 		
-		[Parameter(ParameterSetName = 'SingleObject', Mandatory = $true, ValueFromPipelineByPropertyName = $false)]
+		[Parameter(ParameterSetName = 'SingleObject', Mandatory = $false, ValueFromPipelineByPropertyName = $false)]
 		[Parameter(ParameterSetName = 'MultipleObjects', ValueFromPipelineByPropertyName = $true)]
 		[PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
 		[Alias('ID')]
