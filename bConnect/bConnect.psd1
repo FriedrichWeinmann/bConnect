@@ -9,13 +9,13 @@
 	GUID = '49d01419-b666-4b78-ac69-a0a2c4512afb'
 	
 	# Author of this module
-	Author = 'Baramundi AG'
+	Author = 'Friedrich Weinmann'
 	
 	# Company or vendor of this module
-	CompanyName = 'Baramundi AG'
+	CompanyName = ''
 	
 	# Copyright statement for this module
-	Copyright = 'Copyright (c) 2018 Baramundi AG'
+	Copyright = 'Copyright (c) 2018 Friedrich Weinmann'
 	
 	# Description of the functionality provided by this module
 	Description = 'PowerShell Module to interact with the Baramundi bConnect Rest API'
