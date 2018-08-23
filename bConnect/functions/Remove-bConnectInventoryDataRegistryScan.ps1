@@ -10,6 +10,7 @@
 	.PARAMETER EndpointGuid
 		Valid GUID of a endpoint.
 #>	
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSShouldProcess", "", Justification="Test-PSFShouldProcess is used instead of ShouldProcess.")]
 	[CmdletBinding(SupportsShouldProcess = $true)]
 	param
 	(

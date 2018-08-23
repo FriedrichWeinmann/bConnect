@@ -16,6 +16,16 @@
 	.PARAMETER EndpointGuid
 		Valid GUID of an endpoint.
 	
+	.EXAMPLE
+		PS C:\> Get-bConnectApplication
+	
+		Get all Application from the baramundi Management Suite
+	
+		.EXAMPLE
+		PS C:\> Get-bConnectApplication -EndpointGuid 6e011f01-3e46-4e5f-834d-7e9c09e8c030
+	
+		Get all Application from the specific Windows Endpoint
+	
 	.OUTPUTS
 		bConnect.Application
 #>
@@ -41,7 +51,7 @@
 	
 	process
 	{
-		$body = { }
+		$body = @{ }
 		if ($EndpointGuid) { $body['EndpointId'] = $EndpointGuid }
 		if ($OrgUnitGuid) { $body['OrgUnit'] = $OrgUnitGuid }
 		if ($ApplicationGuid) { $body['Id'] = $ApplicationGuid }

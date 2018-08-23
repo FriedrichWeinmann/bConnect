@@ -15,3 +15,6 @@ foreach ($file in (Get-ChildItem "$ModuleRoot\internal\tepp\*.tepp.ps1" -ErrorAc
 
 # Load License
 . Import-ModuleFile -Path "$ModuleRoot\internal\scripts\license.ps1"
+
+# Load Type Alias
+. Import-ModuleFile -Path "$ModuleRoot\bin\type-aliases.ps1"

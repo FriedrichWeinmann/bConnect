@@ -13,6 +13,7 @@
 	.OUTPUTS
 		OrgUnit
 #>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSShouldProcess", "", Justification="Test-PSFShouldProcess is used instead of ShouldProcess.")]
 	[CmdletBinding(ConfirmImpact = 'Medium', SupportsShouldProcess = $true)]
 	Param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
