@@ -3,13 +3,13 @@
 <#
 	.SYNOPSIS
 		Updates a existing endpoint.
-	
+
 	.DESCRIPTION
 		A detailed description of the Edit-bConnectEndpoint function.
-	
+
 	.PARAMERER Endpoint
 		Valid modified endpoint
-	
+
 	.OUTPUTS
 		Endpoint
 #>
@@ -19,7 +19,7 @@
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		$Endpoint
 	)
-	
+
 	begin
 	{
 		Assert-bConnectConnection
@@ -37,7 +37,7 @@
 				# Dirty workaround: reload the object and compare new vs. old
 				$oldEndpoint = Get-bConnectEndpoint -EndpointGuid $endpointItem.Id
 				$oldEndpoint = ConvertTo-Hashtable $oldEndpoint
-				
+
 				# common properties
 				$newEndpoint = @{ Id = $endpointItem.Id }
 				$propertyList = @(
@@ -45,7 +45,7 @@
 					"GuidOrgUnit"
 				)
 				$endpointItem = ConvertTo-Hashtable $endpointItem
-				
+
 				# Windows
 				if ($endpointItem.Type -eq [bConnectEndpointType]::WindowsEndpoint)
 				{
@@ -57,10 +57,11 @@
 						"GuidBootEnvironment",
 						"GuidHardwareProfile",
 						"PublicKey",
-						"Comments"
+						"Comments",
+						"PrimaryUser"
 					)
 				}
-				
+
 				# BmsNet = Android, iOS, WP, OSX
 				if (($endpointItem.Type -eq [bConnectEndpointType]::AndroidEndpoint) -or
 					($endpointItem.Type -eq [bConnectEndpointType]::iOSEndpoint) -or
@@ -73,7 +74,7 @@
 						"ComplianceCheckCategory"
 					)
 				}
-				
+
 				# OSX
 				if ($endpointItem.Type -eq [bConnectEndpointType]::MacEndpoint)
 				{
@@ -81,7 +82,7 @@
 						"HostName"
 					)
 				}
-				
+
 				foreach ($_property in $propertyList)
 				{
 					if ($endpointItem[$_property] -ine $oldEndpoint[$_property])
@@ -89,7 +90,7 @@
 						$newEndpoint += @{ $_property = $endpointItem[$_property] }
 					}
 				}
-				
+
 				if (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $endpointItem.Id -Action 'Edit Endpoint')
 				{
 					Invoke-bConnectPatch -Controller "Endpoints" -objectGuid $endpointItem.Id -Data $newEndpoint |
