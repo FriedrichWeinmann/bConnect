@@ -16,7 +16,7 @@ namespace bConnect.Endpoints
         /// <summary>
         /// Let's not do this
         /// </summary>
-        NeverExecuteUserJobs = 16,
+        NeverExecuteUserRelatedJobs = 16,
 
         /// <summary>
         /// Only the boss can do this

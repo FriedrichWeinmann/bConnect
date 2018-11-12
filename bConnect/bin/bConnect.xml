@@ -39,6 +39,11 @@
             Update the next time the primary user logs on
             </summary>
         </member>
+        <member name="F:bConnect.Endpoints.PrimaryUserUpdateOption.DoNotUsePrimaryUser">
+            <summary>
+            Don't use the primary user to execute tasks
+            </summary>
+        </member>
         <member name="F:bConnect.Endpoints.EndpointOptions.AlwaysUpdatePrimaryUser">
             <summary>
             Always update when the primary user is logged on
@@ -47,6 +52,11 @@
         <member name="F:bConnect.Endpoints.EndpointOptions.NeverUpdatePrimaryUser">
             <summary>
             Never update while the porimary user is logged on
+            </summary>
+        </member>
+        <member name="F:bConnect.Endpoints.UserJobOptions.AlwaysExecuteUserJobs">
+            <summary>
+            Waiting is for those without resolve
             </summary>
         </member>
         <member name="F:bConnect.Endpoints.EndpointOptions.NeverExecuteUserRelatedJobs">
@@ -114,7 +124,7 @@
             Update options for the primary user
             </summary>
         </member>
-        <member name="F:bConnect.Endpoints.PrimaryUserUpdateOption.UpdateAtNextLogon">
+        <member name="F:bConnect.Endpoints.PrimaryUserUpdateOption.UpdatePrimaryUserOnNextLogon">
             <summary>
             Update the next time the primary user logs on
             </summary>
