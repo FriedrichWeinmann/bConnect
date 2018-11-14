@@ -1,4 +1,6 @@
-﻿<#
+﻿Function Set-bConnectEndpoint
+{
+    <#
      .SYNOPSIS
          Updates an existing endpoint.
 
@@ -48,8 +50,6 @@
      .NOTES
          Additional information about the function.
  #>
-Function Set-bConnectEndpoint
-{
     [CmdletBinding(DefaultParameterSetName = 'WindowsEndpoint',
         ConfirmImpact = 'Medium',
         SupportsShouldProcess = $true)]
@@ -77,8 +77,10 @@ Function Set-bConnectEndpoint
         $Comments,
         $PrimaryUser,
         [Parameter(ParameterSetName = 'MobileEndpoint')]
+        [Parameter(ParameterSetName = 'MacEndpoint')]
         $Owner,
         [Parameter(ParameterSetName = 'MobileEndpoint')]
+        [Parameter(ParameterSetName = 'MacEndpoint')]
         $ComplianceCheckCategory
     )
 
@@ -90,38 +92,35 @@ Function Set-bConnectEndpoint
     {
         ForEach ($endpointItem In $EndpointGuid)
         {
-            If (Test-Guid $EndpointGuid)
+            # bms2016r1
+            # We can not send the whole object because of not editable fields.
+            # So we need to create a new one with editable fields only...
+            # And as this might be too easy we face another problem: we are only allowed to send the changed fields :(
+            # Dirty workaround: reload the object and compare new vs. old
+            $oldEndpoint = Get-bConnectEndpoint -EndpointGuid $EndpointGuid
+            $oldEndpoint = ConvertTo-Hashtable $oldEndpoint
+
+            # common properties
+            $newEndpoint = @{ Id = $EndpointGuid }
+
+            ForEach ($_property In $PSBoundParameters.Keys)
             {
-                # bms2016r1
-                # We can not send the whole object because of not editable fields.
-                # So we need to create a new one with editable fields only...
-                # And as this might be too easy we face another problem: we are only allowed to send the changed fields :(
-                # Dirty workaround: reload the object and compare new vs. old
-                $oldEndpoint = Get-bConnectEndpoint -EndpointGuid $EndpointGuid
-                $oldEndpoint = ConvertTo-Hashtable $oldEndpoint
-
-                # common properties
-                $newEndpoint = @{ Id = $EndpointGuid }
-
-                ForEach ($_property In $PSBoundParameters.Keys)
+                If ($PSBoundParameters[$_property] -ine $oldEndpoint[$_property])
                 {
-                    If ($PSBoundParameters[$_property] -ine $oldEndpoint[$_property])
-                    {
-                        $newEndpoint += @{ $_property = $PSBoundParameters[$_property] }
-                    }
+                    $newEndpoint += @{ $_property = $PSBoundParameters[$_property] }
                 }
+            }
 
-                If (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $newEndpoint.Id -Action 'Edit Endpoint')
-                {
-                    Invoke-bConnectPatch -Controller "Endpoints" -objectGuid $newEndpoint.Id -Data $newEndpoint |
-                        Select-PSFObject 'ID as EndpointGuid', * |
-                        Add-ObjectDetail -TypeName 'bConnect.Endpoint' -WithID
-                }
-                Else
-                {
-                    Write-PSFMessage -Level Verbose -Message "Edit Endpoint"
-                    ForEach ($k In $newEndpoint.Keys) { Write-PSFMessage -Level SomewhatVerbose -Message "$k : $($newEndpoint[$k])" }
-                }
+            If (Test-PSFShouldProcess -PSCmdlet $PSCmdlet -Target $newEndpoint.Id -Action 'Edit Endpoint')
+            {
+                Invoke-bConnectPatch -Controller "Endpoints" -objectGuid $newEndpoint.Id -Data $newEndpoint |
+                    Select-PSFObject 'ID as EndpointGuid', * |
+                    Add-ObjectDetail -TypeName 'bConnect.Endpoint' -WithID
+            }
+            Else
+            {
+                Write-PSFMessage -Level Verbose -Message "Edit Endpoint"
+                ForEach ($k In $newEndpoint.Keys) { Write-PSFMessage -Level SomewhatVerbose -Message "$k : $($newEndpoint[$k])" }
             }
         }
     }
