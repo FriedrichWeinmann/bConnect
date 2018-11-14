@@ -3,7 +3,7 @@
          Updates an existing endpoint.
 
      .DESCRIPTION
-         Wit Set-bConnectEndpoint you can modify an Endpoint directly without the need of an existing Object.
+         With Set-bConnectEndpoint you can modify an Endpoint directly without the need of an existing Object.
          You can just pass an Endpoint Guid and then modify the endpoint with the individual parameters
 
      .Parameter EndpointGuid
