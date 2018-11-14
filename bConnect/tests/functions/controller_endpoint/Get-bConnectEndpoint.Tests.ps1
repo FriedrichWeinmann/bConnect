@@ -1,7 +1,3 @@
-Remove-Module bConnect -ErrorAction Ignore
-Import-Module "$PSScriptRoot\..\..\..\bConnect.psd1"
-Import-Module "$PSScriptRoot\..\..\..\bConnect.psm1" -Force
-Import-Module PSFramework
 
 InModuleScope bConnect {
 
