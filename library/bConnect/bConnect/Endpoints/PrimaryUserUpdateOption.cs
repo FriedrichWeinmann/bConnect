@@ -11,7 +11,7 @@ namespace bConnect.Endpoints
         /// <summary>
         /// Update the next time the primary user logs on
         /// </summary>
-        UpdateAtNextLogon = 0,
+        UpdatePrimaryUserOnNextLogon = 0,
 
         /// <summary>
         /// Don't use the primary user to execute tasks
