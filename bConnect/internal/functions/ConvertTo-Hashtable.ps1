@@ -21,8 +21,9 @@
 		foreach ($objectItem in $Object)
 		{
 			$hashtable = [ordered]@{ }
-			$objectItem | Get-Member -MemberType *Property | ForEach-Object {
-				$hashtable[$_.Name] = $objectItem.($_.Name)
+			foreach ($property in $objectItem)
+			{
+				$hashtable[$property.Name] = $property.Value
 			}
 			$hashtable
 		}
