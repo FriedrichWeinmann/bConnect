@@ -1,5 +1,9 @@
 # Changelog bConnect Modul
 
+## [1.0.2.0] - 2018-12-18
+
+- Connect String hinzugefügt damit man feststellen kann mit welchem Server das Modul aktuell verbunden ist.
+
 ## [1.0.1.0] - 2018-11-12
 
 - Set-bConnectEndpoint Cmdlet hinzugefügt
