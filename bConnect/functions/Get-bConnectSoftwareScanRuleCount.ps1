@@ -1,4 +1,4 @@
-Function Get-bConnectSoftwareScanRule
+Function Get-bConnectSoftwareScanRuleCount
 {
     <#
 	.SYNOPSIS
@@ -16,6 +16,41 @@ Function Get-bConnectSoftwareScanRule
     }
     process
     {
-        Invoke-bConnectGet -Controller "SoftwareScanRuleCounts"
+        try
+        {
+            Invoke-bConnectGet -Controller "SoftwareScanRuleCounts"
+        }
+        catch
+        {
+            $RulesToEndpoint = Get-bConnectEndpointInvSoftware
+            $Endpoints = @{}
+            Get-bConnectEndpoint | ForEach-Object {$Endpoints[$_.ID] = $_ | Select-PSFObject ID, EndpointGuid, DisplayName}
+            $SoftwareRules = Get-bConnectSoftwareScanRule
+
+            $Result = @()
+            foreach ($Rule in $RulesToEndpoint)
+            {
+                [PSCustomObject]$_Endpoint = $Endpoints[$Rule.GuidEndpoint]
+
+                $Result += [PSCustomObject]@{
+                    EndpointInfo = $_Endpoint
+                    GuidRule     = $Rule.GuidRule
+                }
+            }
+
+            $GroupedResults = @{}
+            $Result | Group-Object GuidRule | ForEach-Object {$GroupedResults[$_.Name] = $_.Group}
+
+            foreach ($Rule in $SoftwareRules)
+            {
+                [PSCustomObject]@{
+                    InstalledCount     = $GroupedResults[$Rule.ID].Count
+                    InstalledEndpoints = $GroupedResults[$Rule.ID].EndpointInfo
+                    SoftwareScanRule   = $Rule
+                }
+            }
+        }
+
+
     }
 }
