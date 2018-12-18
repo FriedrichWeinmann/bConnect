@@ -79,6 +79,7 @@ Additional information about the function.
             ValueFromPipelineByPropertyName = $true)]
         [PsfValidatePattern('\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b', ErrorMessage = 'Failed to parse input as guid: {0}')]
         [string]$StaticGroupGuid,
+        [string]$RegisteredUser,
         [switch]$PublicKey,
         [switch]$IncludeSoftware,
         [switch]$IncludeSnmpData
@@ -96,6 +97,7 @@ Additional information about the function.
         ElseIf ($OrgUnitGuid) { $body["OrgUnit"] = $OrgUnitGuid }
         ElseIf ($DynamicGroupGuid) { $body["DynamicGroup"] = $DynamicGroupGuid }
         ElseIf ($StaticGroupGuid) { $body["StaticGroup"] = $StaticGroupGuid }
+        Elseif ($RegisteredUser) { $body["User"] = $RegisteredUser }
 
         # Adds the Public Key to the Ouptut
         If ($PublicKey) { $body["PubKey"] = $true }
