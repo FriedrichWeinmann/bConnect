@@ -3,7 +3,7 @@
     ModuleToProcess    = 'bConnect.psm1'
 
     # Version number of this module.
-    ModuleVersion      = '1.0.1.0'
+    ModuleVersion      = '1.0.2.0'
 
     # ID used to uniquely identify this module
     GUID               = '49d01419-b666-4b78-ac69-a0a2c4512afb'
@@ -77,6 +77,7 @@
         'Get-bConnectEndpointInvSoftware',
         'Get-bConnectEndpointOption',
         'Get-bConnectHardwareProfile',
+        'Get-bConnectImages',
         'Get-bConnectInfo',
         'Get-bConnectInventoryAppScan',
         'Get-bConnectInventoryDataCustomScan',
@@ -90,6 +91,7 @@
         'Get-bConnectJobInstance',
         'Get-bConnectOrgUnit',
         'Get-bConnectSoftwareScanRule',
+        'Get-bConnectSoftwareScanRuleCount',
         'Get-bConnectStaticGroup',
         'Get-bConnectVariable',
         'Get-bConnectVersion',

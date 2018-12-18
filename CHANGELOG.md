@@ -2,7 +2,41 @@
 
 ## [1.0.2.0] - 2018-12-18
 
-- Connect String hinzugefügt damit man feststellen kann mit welchem Server das Modul aktuell verbunden ist.
+- bConnect 2018R2 Neuerungen abgebildet
+
+- - Endpoints können jetzt nach RegisteredUser gefiltert werden
+
+- - Jobs können nach Kiosk User gefiltert werden
+
+- - JobInstances können jetzt nach Endpoint und Kiosk User gefiltert werden.
+
+    Es werden beide Parameter benötigt. Endpoint und Kiosk User. Nur nach dem
+    User kann nicht gefiltert werden.
+
+- - Get-bConnectSoftwareScanRuleCount hinzugefügt.
+
+    Ich hab ehrlich gesagt keine Ahnung wieso das ganze nur mit bLicense funktioniert.
+    So wie ich das der API Dokumentation entnehmen kann sind das alles Werte die ich
+    auch über die bConnect API zusemmen stellen kann. Aus diesem Grund habe ich die
+    Funktion so nachgebaut, so dass sie auch ohne bLicense geht. Allerdings nur wenn
+    der Original API Aufruf fehlschlägt. Man erhält dann eine Liste mit der Zuordnung
+    von Software zu PC. Mein Workaround dürfte je nach Größe der Umgebung von der
+    Performance natürlich deutlich schlechter sein als ggfs. ein gespeicherter View
+    auf dem SQL Server den die API ausgibt.
+
+    Da wir aktuell kein bLicense haben kann ich nicht garantieren das der Output
+    des Workaround mit dem Output der API 100%ig übereinstimmt.
+
+- - Get-bConnectImaage hinzugeügt
+
+    Aufruf geht nur wenn eine IconID mitgegeben wird. Diese kann man sofern ein Bild
+    beim Job hinterlegt ist dem Job Objekt entnehmen.
+    z.B.  Get-bconnectJob | Where {$_.Name -like "Job mit Bild"} | Get-bConnectImages -ExportPath "C:\"
+
+    Zusätzlich ist es möglich per ExportPath einen Pfad anzugeben wo die Bilder
+    abgespeichert werden. Als Name wird die ID verwendet.
+
+- Connect String zu Get-bConnectInfo hinzugefügt damit man feststellen kann   mit welchem Server das Modul aktuell verbunden ist.
 
 ## [1.0.1.0] - 2018-11-12
 
