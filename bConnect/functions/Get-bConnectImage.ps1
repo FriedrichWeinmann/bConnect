@@ -7,8 +7,11 @@
 	.DESCRIPTION
 		Get all the Image Object stored in the BMS. Image object are supported on Jobs
 
-	.PARAMETER ImageID
-		Valid GUID of an
+	.PARAMETER IconID
+		Valid GUID of an Image. The GUID is saved inside a bConnect.Job Object
+
+	.PARAMETER ExportPath
+		A Path where the received images gets saved. Filename is the ID of the Image
 
 	.OUTPUTS
 		Array of Images (see bConnect documentation for more details)
