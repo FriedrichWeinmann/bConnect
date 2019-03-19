@@ -19,11 +19,6 @@ namespace bConnect.Endpoints
         AllowAutoInstall = 2,
 
         /// <summary>
-        /// Update the next time the primary user logs on
-        /// </summary>
-        UpdatePrimaryUserOnNextLogon = 0,
-
-        /// <summary>
         /// Don't use the primary user
         /// </summary>
         DoNotUsePrimaryUser = 4,
@@ -37,11 +32,6 @@ namespace bConnect.Endpoints
         /// Never update while the porimary user is logged on
         /// </summary>
         NeverUpdatePrimaryUser = 12,
-
-        /// <summary>
-        /// Waiting is for those without resolve
-        /// </summary>
-        AlwaysExecuteUserJobs = 0,
 
         /// <summary>
         /// Don't run code that is user specific
