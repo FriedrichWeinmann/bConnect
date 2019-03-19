@@ -43,7 +43,7 @@
                 </TableRowEntries>
             </TableControl>
         </View>
-		<View>
+        <View>
             <Name>bConnect.EndpointInvSoftware</Name>
             <ViewSelectedBy>
                 <TypeName>bConnect.EndpointInvSoftware</TypeName>
@@ -77,7 +77,7 @@
                 </TableRowEntries>
             </TableControl>
         </View>
-		<View>
+        <View>
             <Name>bConnect.Endpoint</Name>
             <ViewSelectedBy>
                 <TypeName>bConnect.Endpoint</TypeName>
@@ -93,13 +93,13 @@
                     <TableColumnHeader>
                         <Width>16</Width>
                     </TableColumnHeader>
-					<TableColumnHeader>
+                    <TableColumnHeader>
                         <Width>18</Width>
                     </TableColumnHeader>
-					<TableColumnHeader>
+                    <TableColumnHeader>
                         <Width>20</Width>
                     </TableColumnHeader>
-					<TableColumnHeader>
+                    <TableColumnHeader>
                         <Width>30</Width>
                     </TableColumnHeader>
                 </TableHeaders>
@@ -118,10 +118,10 @@
                             <TableColumnItem>
                                 <PropertyName>PrimaryMAC</PropertyName>
                             </TableColumnItem>
-							<TableColumnItem>
+                            <TableColumnItem>
                                 <PropertyName>OperatingSystem</PropertyName>
                             </TableColumnItem>
-							<TableColumnItem>
+                            <TableColumnItem>
                                 <PropertyName>PrimaryUser</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
@@ -129,5 +129,73 @@
                 </TableRowEntries>
             </TableControl>
         </View>
+        <View>
+            <Name>bConnect.JobInstanceFailed</Name>
+            <ViewSelectedBy>
+                <TypeName>bConnect.JobInstanceFailed</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Width>40</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>40</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>11</Width>
+                        <Alignment>Center</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>30</Width>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>EndpointName</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>JobDefinitionName</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>BmsNetState</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>StateText</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+        <View>
+            <Name>bConnect.JobInstanceFailed</Name>
+            <ViewSelectedBy>
+                <TypeName>bConnect.JobInstanceFailed</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <PropertyName>EndpointName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>JobDefinitionName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>BmsNetState</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>StateText</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
     </ViewDefinitions>
 </Configuration>
+

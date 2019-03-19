@@ -11,7 +11,11 @@
 		Valid GUID of a job.
 
 	.PARAMETER OrgUnitGuid
-		Valid GUID of a Orgunit.
+        Valid GUID of a Orgunit.
+
+    .PARAMETER User
+        Valid Registered User Name. For example: mike.miller@contoso.org
+        Only User Principal Names are allowed
 
 	.PARAMETER OnlyWindowsJobs
 		Lists only Jobs for Windows Endpoints

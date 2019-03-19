@@ -20,6 +20,10 @@ Valid GUID of a DynamicGroup
 .PARAMETER StaticGroupGuid
 Valid GUID of a DynamicGroup
 
+.PARAMETER RegisteredUser
+Returns a list of Endpoint objects filtered by the specified Registered User.
+Acceppts only User Principal Names. For example: mike.miller@contoso.org
+
 .PARAMETER PublicKey
 When Activated the Public Key of the Endpoint is added to the Ouput
 
