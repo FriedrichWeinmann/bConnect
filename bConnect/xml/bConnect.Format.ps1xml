@@ -147,7 +147,8 @@
                         <Alignment>Center</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Width>30</Width>
+                        <Label>TimeLastAction</Label>
+                        <Width>20</Width>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -163,7 +164,9 @@
                                 <PropertyName>BmsNetState</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>StateText</PropertyName>
+                                <ScriptBlock>
+                                    [System.DateTime]::Parse($_.TimeLastAction).ToString()
+                                </ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -187,6 +190,12 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>BmsNetState</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>TimeLastAction</Label>
+                                <ScriptBlock>
+                                    [System.DateTime]::Parse($_.TimeLastAction).ToString()
+                                </ScriptBlock>
                             </ListItem>
                             <ListItem>
                                 <PropertyName>StateText</PropertyName>
