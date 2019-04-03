@@ -68,11 +68,11 @@
     {
         if ($Data.Count -gt 0)
         {
-            $restResult = Invoke-RestMethod -Uri $uri -Body $Data -Credential $script:_connectCredentials -Method Get -ContentType "application/json" -TimeoutSec $script:_ConnectionTimeout
+            $restResult = Invoke-RestMethod -Uri $uri -Body $Data -Credential $script:_connectCredentials -Method Get -ContentType "application/json; charset=utf-8" -TimeoutSec $script:_ConnectionTimeout
         }
         else
         {
-            $restResult = Invoke-RestMethod -Uri $uri -Credential $script:_connectCredentials -Method Get -ContentType "application/json" -TimeoutSec $script:_ConnectionTimeout
+            $restResult = Invoke-RestMethod -Uri $uri -Credential $script:_connectCredentials -Method Get -ContentType "application/json; charset=utf-8" -TimeoutSec $script:_ConnectionTimeout
         }
 
         if ($restResult)
