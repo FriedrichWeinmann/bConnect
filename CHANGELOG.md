@@ -1,5 +1,11 @@
 # Changelog bConnect Modul
 
+## [1.0.2.1] - 2019-04-03
+
+- Invoke-Cmdlets angepasst damit auch Änderungen mit Umlauten sauber an die REST API
+    übertragen werden.
+
+
 ## [1.0.2.0] - 2018-12-18
 
 - bConnect 2018R2 Neuerungen abgebildet
